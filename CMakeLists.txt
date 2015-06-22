@@ -27,7 +27,7 @@ include_directories	(${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS})
 
 
 
-add_subdirectory (${PROJECT_SOURCE_DIR}/PerspectiveDistortionRemove)
+add_subdirectory (${PROJECT_SOURCE_DIR}/PDR)
 
 
 
