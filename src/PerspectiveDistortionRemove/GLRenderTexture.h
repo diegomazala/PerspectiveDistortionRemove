@@ -26,8 +26,6 @@ public:
 public slots:
 	virtual void initialize();
 	virtual void render();
-	virtual void run();
-	virtual void plot(int w, int h);
 	virtual void cleanup();
 	virtual void setImage(const QImage& image);
 	

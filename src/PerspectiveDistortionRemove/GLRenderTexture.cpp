@@ -71,21 +71,6 @@ void GLRenderTexture::initialize()
 
 
 
-void GLRenderTexture::run()
-{
-	renderFbo->bind();
-	{
-		QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
-		f->glViewport(0, 0, renderFbo->width(), renderFbo->height());
-		texture->bind();
-		vao.bind();
-		program->bind();
-		f->glDrawArrays(GL_QUADS, 0, 4);
-		program->release();
-		vao.release();
-	}
-	renderFbo->bindDefault();
-}
 
 
 void GLRenderTexture::render()
@@ -103,19 +88,6 @@ void GLRenderTexture::render()
 	vao.release();
 }
 
-
-void GLRenderTexture::plot(int w, int h)
-{
-	vao.bind();
-	plotProgram->bind();
-	QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
-	f->glActiveTexture(GL_TEXTURE0);
-	f->glBindTexture(GL_TEXTURE_2D, renderFbo->texture());
-	f->glViewport(0, 0, w, h);
-	f->glDrawArrays(GL_QUADS, 0, 4);
-	plotProgram->release();
-	vao.release();
-}
 
 
 

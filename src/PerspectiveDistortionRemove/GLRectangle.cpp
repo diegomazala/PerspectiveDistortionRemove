@@ -5,9 +5,12 @@
 
 GLRectangle::GLRectangle(QObject *parent)
 	: QObject(parent),
-	image(1, 1, QImage::Format::Format_ARGB32)
+	drawMode(GL_LINE_LOOP)
 {
-	image.fill(0);
+	vertices << QVector3D(-1.0f, -1.0f, 0.0f)
+		<< QVector3D(-1.0f, 1.0f, 0.0f)
+		<< QVector3D(1.0f, 1.0f, 0.0f)
+		<< QVector3D(1.0f, -1.0f, 0.0f);
 }
 
 
@@ -22,37 +25,37 @@ GLRectangle::~GLRectangle()
 void GLRectangle::cleanup()
 {
 	vbo->destroy();
-	texture.clear();
-	renderFbo.clear();
 }
 
 
 void GLRectangle::initialize()
 {
 	initializeOpenGLFunctions();
-
-	texture.reset(new QOpenGLTexture(image.mirrored()));
-	texture->setWrapMode(QOpenGLTexture::WrapMode::ClampToEdge);
-	texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-	texture->setMagnificationFilter(QOpenGLTexture::Linear);
-
+	
 	program.reset(buildProgram());
 	program->release();
 
 	vao.create();
 	vao.bind();
-	vbo.reset(buildQuadTextured());
+	vbo.reset(buildVertexBuffer());
 	vao.release();
-
-	QOpenGLFramebufferObjectFormat format;
-	format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-	renderFbo.reset(new QOpenGLFramebufferObject(image.size(), format));
 }
+
+
+void GLRectangle::setDrawMode(GLenum draw_mode)
+{
+	drawMode = draw_mode;
+}
+
 
 void GLRectangle::setVertex(int index, QVector3D v)
 {
 	vertices[index] = v;
-	updateVertexBuffer();
+	//updateVertexBuffer();
+
+	vbo->bind();
+	vbo->write(index * sizeof(QVector3D), &v[0], sizeof(QVector3D));
+	vbo->release();
 }
 
 void GLRectangle::setVertices(const QVector<QVector3D>& verts)
@@ -60,6 +63,8 @@ void GLRectangle::setVertices(const QVector<QVector3D>& verts)
 	vertices = verts;
 	updateVertexBuffer();
 }
+
+
 
 void GLRectangle::updateVertexBuffer()
 {
@@ -72,28 +77,15 @@ void GLRectangle::updateVertexBuffer()
 void GLRectangle::render()
 {
 	vao.bind();
-
-	//vertices.clear();
-	//vertices << QVector3D(-0.8f, -0.8f, 0.0f)
-	//	<< QVector3D(-0.8f, 0.8f, 0.0f)
-	//	<< QVector3D(0.8f, 0.8f, 0.0f)
-	//	<< QVector3D(0.8f, -0.8f, 0.0f);
-	//updateVertexBuffer();
-
-	if (!texture.isNull())
-		texture->bind();
-
 	program->bind();
 	QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
-	f->glDrawArrays(GL_QUADS, 0, 4);
+	f->glDrawArrays(drawMode, 0, vertices.size());
 	program->release();
-
 	vao.release();
 }
 
 
 
-// Build a pass through glsl program
 QOpenGLShaderProgram* GLRectangle::buildProgram() const
 {
 	QOpenGLShaderProgram* prog = new QOpenGLShaderProgram();
@@ -128,14 +120,9 @@ QOpenGLShaderProgram* GLRectangle::buildProgram() const
 
 
 
-QOpenGLBuffer* GLRectangle::buildQuadTextured()
+QOpenGLBuffer* GLRectangle::buildVertexBuffer()
 {
 	QOpenGLBuffer* lpvbo = new QOpenGLBuffer();
-
-	vertices << QVector3D(-0.5f, -0.5f, 0.0f)
-		<< QVector3D(-0.5f, 0.5f, 0.0f)
-		<< QVector3D(0.5f, 0.5f, 0.0f)
-		<< QVector3D(0.5f, -0.5f, 0.0f);
 
 	const size_t BufferSize = vertices.size() * sizeof(QVector3D);
 	const size_t VertexSize = sizeof(QVector3D);

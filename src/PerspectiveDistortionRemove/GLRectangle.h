@@ -30,26 +30,22 @@ public:
 
 	void setVertex(int index, QVector3D v);
 	void setVertices(const QVector<QVector3D>& verts);
+	void setDrawMode(GLenum draw_mode);
 	
 protected:	// methods
 
 	virtual QOpenGLShaderProgram* buildProgram() const;
-	virtual QOpenGLBuffer* buildQuadTextured();
+	virtual QOpenGLBuffer* buildVertexBuffer();
 	virtual void updateVertexBuffer();
 
 
 protected: // attributes
 	QOpenGLVertexArrayObject vao;
 	QScopedPointer<QOpenGLBuffer> vbo;
-
-	QSharedPointer<QOpenGLTexture> texture;
 	QScopedPointer<QOpenGLShaderProgram> program;
-	QScopedPointer<QOpenGLShaderProgram> plotProgram;
-	QSharedPointer<QOpenGLFramebufferObject> renderFbo;
-
-	QImage image;
-
 	QVector<QVector3D> vertices;
+	bool drawVertices;
+	GLenum drawMode;
 };
 
 

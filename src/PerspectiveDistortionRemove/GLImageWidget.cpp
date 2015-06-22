@@ -11,10 +11,12 @@ GLImageWidget::GLImageWidget(QWidget *parent)
 	rect(this),
 	currentVertexIndex(0)
 {
+	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+	
 	// loop call update
-	 QTimer *timer = new QTimer(this);
-	 connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-	 timer->start(33);
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	timer->start(33);
 }
 
 
@@ -65,6 +67,8 @@ void GLImageWidget::initializeGL()
 
 	renderTexture.initialize();
 	rect.initialize();
+
+	//renderTexture.setImage(QImage("../../../data/brahma01.jpg"));
 }
 
 
@@ -72,7 +76,7 @@ void GLImageWidget::initializeGL()
 
 void GLImageWidget::paintGL()
 {
-	//renderTexture.render();
+	renderTexture.render();
 	rect.render();
 }
 
@@ -106,13 +110,13 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 	{
 		if (Qt::ControlModifier == QApplication::keyboardModifiers())
 		{
-			float x = float(event->x()) / float(width());
-			float y = 1.0f - float(event->y()) / float(height());
+			// normalizing values [(-1,-1):(1,1)]
+			float x = float(event->x()) / float(width()) * 2.0f - 1.0f;
+			float y = (float(event->y()) / float(height()) * 2.0f - 1.0f) * (-1.0f);	// inverting y coordinate
+			float z = 0.f;
 
-			if (currentVertexIndex < 3)
-				rect.setVertex(currentVertexIndex++, QVector3D(-0.8f, -0.8f, 0.0f));
-
-			std::cout << currentVertexIndex << " : " << x << ", " << y << std::endl;
+			if (currentVertexIndex < 4)
+				rect.setVertex(currentVertexIndex++, QVector3D(x, y, z));
 		}
 	}
 	
@@ -130,10 +134,8 @@ void GLImageWidget::keyReleaseEvent(QKeyEvent *event)
 {
 	switch (event->key())
 	{
-	//case Qt::Key_Q:
-	//	close();
-	//	break;
 	case Qt::Key_Control:
+		rect.setDrawMode(GL_LINE_LOOP);
 		currentVertexIndex = 0;
 		break;
 
@@ -149,11 +151,10 @@ void GLImageWidget::keyPressEvent(QKeyEvent *event)
 {
 	switch (event->key())
 	{
-		//case Qt::Key_Q:
-		//	close();
-		//	break;
+		
 	case Qt::Key_Control:
 		currentVertexIndex = 0;
+		rect.setDrawMode(GL_POINTS);
 		break;
 
 	default:
