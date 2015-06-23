@@ -5,6 +5,7 @@ get_filename_component(TARGET_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
 
 set  (SOURCE_FILES		
+						PDR.cpp
 						MainWindow.cpp 
 						GLRectangle.cpp
 						GLRenderTexture.cpp
@@ -12,6 +13,7 @@ set  (SOURCE_FILES
 						AppMain.cpp )
 
 set  (HEADER_FILES		
+						PDR.h
 						MainWindow.h
 						GLRectangle.h
 						GLRenderTexture.h

@@ -13,8 +13,8 @@ set ( PROJECT_BINARY_DIR "${PROJECT_ROOT_DIR}/bin")
 
 include_directories	(${PROJECT_ROOT_DIR}/include)
 
-#######################################################################
-############################# SETUP QT5 ##################################
+######################################################################
+############################# SETUP QT5 ##############################
 find_package (Qt5OpenGL REQUIRED)
 find_package (Qt5Widgets REQUIRED)
 if (Qt5_POSITION_INDEPENDENT_CODE)
@@ -25,7 +25,20 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)	# Find includes in corresponding build directo
 include_directories	(${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS})
 #######################################################################
 
-
+######################################################################
+############################### EIGEN 3 ##############################
+# pkg-config is used so we don't hard-code the location of eigen.
+find_package(PkgConfig)
+if(NOT PKG_CONFIG_FOUND)
+    set( EIGEN3_INCLUDE_DIRS "$ENV{EIGEN3_INCLUDE_DIR}" )
+    if( NOT EIGEN3_INCLUDE_DIRS )
+    message( SEND_ERROR "pkg-config not found on your system. Please point the environment variable EI    GEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
+endif()
+else()
+    pkg_check_modules(EIGEN3 REQUIRED eigen3)
+endif()
+include_directories( ${EIGEN3_INCLUDE_DIRS} )
+######################################################################
 
 add_subdirectory (${PROJECT_SOURCE_DIR}/PDR)
 
