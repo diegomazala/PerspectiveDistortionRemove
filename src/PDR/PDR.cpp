@@ -38,13 +38,21 @@ void PDR::setImagePoint(int index, float x, float y)
 
 void PDR::solve()
 {
-	for (int i = 0; i < pointCount; ++i)
+	std::cout.precision(0);
+
+	for (int i = 0; i < pointCount; ++i)			// setting vector b
 	{
 		b[i * 2 + 0] = imagePoints[i].x();
 		b[i * 2 + 1] = imagePoints[i].y();
 	}
 
-	for (int p = 0; p < pointCount; ++p)
+	std::cout << "b:" << std::endl;
+	for (int i = 0; i < b.size(); ++i)
+		std::cout << std::fixed << b[i] << '\t';
+	std::cout << std::endl << std::endl;
+
+
+	for (int p = 0; p < pointCount; ++p)			// setting matrix A
 	{
 		int i = p * 2 + 0;
 		int j = 0;
@@ -70,13 +78,14 @@ void PDR::solve()
 		A(i, j++) = -worldPoints[p].x() * imagePoints[p].y();
 		A(i, j++) = -worldPoints[p].y() * imagePoints[p].y();
 	}
-	
+
 	std::cout << "Matrix A: \n" << A << std::endl << std::endl;
 
-	x = A.colPivHouseholderQr().solve(b);
-	std::cout << "b:" << std::endl;
+	x = A.colPivHouseholderQr().solve(b);				// computing vector x
+	std::cout << "x:" << std::endl;
 	for (int i = 0; i < x.size(); ++i)
 		std::cout << std::fixed << x[i] << '\t';
+
 	float relative_error = (A*x - b).norm() / b.norm(); // norm() is L2 norm
 	std::cout << "\n\nThe relative error is: " << relative_error << std::endl << std::endl;
 
@@ -104,7 +113,9 @@ void PDR::computePixel(float x, float y, float& rx, float& ry) const
 	ry = r.y() / r.z();
 }
 
-void PDR::computImageSize(int in_width, int in_height, int& out_width, int& out_height, int& shift_x, int& shift_y) const
+
+//void PDR::computImageSize(float in_width, float in_height, float& out_width, float& out_height, float& shift_x, float& shift_y) const
+void PDR::computImageSize(float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const
 {
 	Eigen::Vector3f p[4] = { 
 		{ 0, 0, 1.0f }, 
@@ -124,11 +135,11 @@ void PDR::computImageSize(int in_width, int in_height, int& out_width, int& out_
 				<< "r[" << i << "] : (" << r[i].x() << ", " << r[i].y() << ")" << std::endl;
 	}
 
-	float min_x = r[0].x();
-	float max_x = r[0].x();
+	min_x = r[0].x();
+	max_x = r[0].x();
 
-	float min_y = r[0].y();
-	float max_y = r[0].y();
+	min_y = r[0].y();
+	max_y = r[0].y();
 
 	for (int i = 1; i < 4; ++i)
 	{
@@ -146,10 +157,9 @@ void PDR::computImageSize(int in_width, int in_height, int& out_width, int& out_
 	}
 
 
-	std::cout << "\n\nmin-max : (" << min_x << "," << min_y << ") (" << max_x << ", " << max_y << ")" << std::endl;
-
+	std::cout << "\n\nMinMax : (" << min_x << "," << min_y << ") (" << max_x << ", " << max_y << ")" << std::endl;
 	std::cout << "Image Size: " << max_x - min_x << ", " << max_y - min_y << std::endl;
 
-	out_width = max_x - min_x;
-	out_height = max_y - min_y;
+	//out_width = max_x - min_x;
+	//out_height = max_y - min_y;
 }

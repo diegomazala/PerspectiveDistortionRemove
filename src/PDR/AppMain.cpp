@@ -3,13 +3,31 @@
 
 #include <QImage>
 #include "PDR.h"
+#include <iostream>
+
+
+
+
+template <typename T>
+static T Lerp(T const& x, T const& x0, T const& x1, T const& y0, T const& y1)
+{
+	if ((x1 - x0) == 0)
+		return (y0 + y1) / 2;
+	return y0 + (x - x0) * (y1 - y0) / (x1 - x0);
+}
+
 
 int main(int argc, char* argv[])
 {
-	//QApplication a(argc, argv);
-	//MainWindow w;
-	//w.show();
-	//return a.exec();
+#if 0
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
+	return a.exec();
+
+#else
+	// Usage Example:
+	// $ ./PDR.exe ../../data/brahma01.jpg ../../data/_output.jpg 1 > ../../data/out.txt
 
 	// image size = 800 x 600
 	
@@ -25,44 +43,21 @@ int main(int argc, char* argv[])
 	// 81.9, 61.3
 	// 0, 61.3
 
-	float s = atoi(argv[3]);
-	float shift_x = atoi(argv[4]);
-	float shift_y = atoi(argv[5]);
+	float s = atof(argv[3]);
 	PDR pdr(4);
 
-	pdr.setWorldPoint(0, 324, 52);
-	pdr.setWorldPoint(1, 631, 113);
-	pdr.setWorldPoint(2, 633, 412);
-	pdr.setWorldPoint(3, 350, 560);
+	pdr.setImagePoint(0, 324, 52);
+	pdr.setImagePoint(1, 631, 113);
+	pdr.setImagePoint(2, 633, 412);
+	pdr.setImagePoint(3, 350, 560);
 
-	pdr.setImagePoint(0, 0.0f + shift_x, 0.0f + shift_y);
-	pdr.setImagePoint(1, 81.9f + shift_x, 0.0f + shift_y);
-	pdr.setImagePoint(2, 81.9f + shift_x, 61.3f + shift_y);
-	pdr.setImagePoint(3, 0.0f + shift_x, 61.3f + shift_y);
+	pdr.setWorldPoint(0, 0.0f * s, 0.0f * s);
+	pdr.setWorldPoint(1, 81.9f * s, 0.0f * s);
+	pdr.setWorldPoint(2, 81.9f * s, 61.3f * s);
+	pdr.setWorldPoint(3, 0.0f * s, 61.3f * s);
 
-	//pdr.setImagePoint(0, 0.0f * s, 0.0f * s);
-	//pdr.setImagePoint(1, 81.9f * s, 0.0f * s);
-	//pdr.setImagePoint(2, 81.9f * s, 61.3f * s);
-	//pdr.setImagePoint(3, 0.0f * s, 61.3f * s);
-
-
-	//pdr.setImagePoint(0, 324, 52);
-	//pdr.setImagePoint(1, 631, 113);
-	//pdr.setImagePoint(2, 633, 412);
-	//pdr.setImagePoint(3, 350, 560);
-
-	//pdr.setWorldPoint(0, 0.0f, 0.0f);
-	//pdr.setWorldPoint(1, 81.9f, 0.0f);
-	//pdr.setWorldPoint(2, 81.9f, 61.3f);
-	//pdr.setWorldPoint(3, 0.0f, 61.3f);
-
-	//pdr.setWorldPoint(3, 0.0f, 0.0f);
-	//pdr.setWorldPoint(2, 81.9f, 0.0f);
-	//pdr.setWorldPoint(1, 81.9f, 61.3f);
-	//pdr.setWorldPoint(0, 0.0f, 61.3f);
 
 	pdr.solve();
-
 	
 
 	std::string inputFileName = "input.jpg";
@@ -73,39 +68,33 @@ int main(int argc, char* argv[])
 		outputFileName = argv[2];
 
 	QImage input(inputFileName.c_str());
-	QImage output(1200, 900, input.format());
-	output.fill(qRgb(0, 0, 0));
 	
-	int newWidth = 0;
-	int newHeight = 0;
-	int shiftX = 0;
-	int shiftY = 0;
-	pdr.computImageSize(input.width(), input.height(), newWidth, newHeight, shiftX, shiftY);
+	float minX = 0;
+	float maxX = 0;
+	float minY = 0;
+	float maxY = 0;
 
+	pdr.computImageSize(input.width(), input.height(), minX, maxX, minY, maxY);
 
-	for (int x = 0; x < output.width(); ++x)
+	QImage output(maxX - minX, maxY - minY, input.format());
+	output.fill(qRgb(0, 0, 0));
+
+	float dx = output.width() / (maxX - minX);
+	float dy = output.height() / (maxY - minY);
+
+	for (int x = 0; x < input.width(); ++x)
 	{
-		for (int y = 0; y < output.height(); ++y)
+		for (int y = 0; y < input.height(); ++y)
 		{
-			int nx = x; // +shift_x;
-			int ny = y; // +shift_y;
+			float tx = 0;
+			float ty = 0;
+			pdr.computePixel(x, y, tx, ty);
 
-			float rx = 0;
-			float ry = 0;
-			pdr.computePixel(nx, ny, rx, ry);
-
-			if (rx > 0
-				&& ry > 0
-				&& rx < input.width()
-				&& ry < input.height())
-			{
-
-				if (nx < output.width() && ny < output.height())
-					output.setPixel(nx, ny, input.pixel(rx, ry));
-			}
+			output.setPixel((tx - minX) * dx, (ty - minY) * dy, input.pixel(x, y));
 		}
 	}
 
 	output.save(outputFileName.c_str());
 	return EXIT_SUCCESS;
+#endif
 }
