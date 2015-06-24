@@ -12,7 +12,9 @@ GLImageWidget::GLImageWidget(QWidget *parent)
 	currentVertexIndex(0)
 {
 	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-	
+	//setFlag(Qt::WA_Hover);
+	setMouseTracking(true);
+
 	// loop call update
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -67,8 +69,6 @@ void GLImageWidget::initializeGL()
 
 	renderTexture.initialize();
 	rect.initialize();
-
-	//renderTexture.setImage(QImage("../../../data/brahma01.jpg"));
 }
 
 
@@ -110,13 +110,20 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 	{
 		if (Qt::ControlModifier == QApplication::keyboardModifiers())
 		{
-			// normalizing values [(-1,-1):(1,1)]
-			float x = float(event->x()) / float(width()) * 2.0f - 1.0f;
-			float y = (float(event->y()) / float(height()) * 2.0f - 1.0f) * (-1.0f);	// inverting y coordinate
-			float z = 0.f;
-
 			if (currentVertexIndex < 4)
+			{
+				int img_x = float(event->x()) / float(width()) * float(renderTexture.width());
+				int img_y = float(event->y()) / float(height()) * float(renderTexture.height());
+
+				emit newPoint(currentVertexIndex, img_x, img_y);
+
+				// normalizing values [(-1,-1):(1,1)]
+				float x = float(event->x()) / float(width()) * 2.0f - 1.0f;
+				float y = (float(event->y()) / float(height()) * 2.0f - 1.0f) * (-1.0f);	// inverting y coordinate
+				float z = 0.f;
+
 				rect.setVertex(currentVertexIndex++, QVector3D(x, y, z));
+			}
 		}
 	}
 	
@@ -127,6 +134,10 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void GLImageWidget::mouseMoveEvent(QMouseEvent *event)
 {
+	int x = float(event->x()) / float(width()) * float(renderTexture.width());
+	int y = float(event->y()) / float(height()) * float(renderTexture.height());
+
+	emit mouseMove(x, y);
 }
 
 

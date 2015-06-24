@@ -5,7 +5,7 @@
 
 GLRectangle::GLRectangle(QObject *parent)
 	: QObject(parent),
-	drawMode(GL_LINE_LOOP)
+	drawMode(GL_POINTS)
 {
 	vertices << QVector3D(-1.0f, -1.0f, 0.0f)
 		<< QVector3D(-1.0f, 1.0f, 0.0f)

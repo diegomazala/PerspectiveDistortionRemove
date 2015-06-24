@@ -33,6 +33,9 @@ public slots:
 	void setImage(const QImage& image);
 	void setImage(const QString& fileimage);
 	
+signals:
+	void mouseMove(int, int);
+	void newPoint(int,int, int);
 
 protected:	// methods
 

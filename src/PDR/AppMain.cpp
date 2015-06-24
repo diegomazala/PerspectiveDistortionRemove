@@ -19,7 +19,7 @@ static T Lerp(T const& x, T const& x0, T const& x1, T const& y0, T const& y1)
 
 int main(int argc, char* argv[])
 {
-#if 0
+#if 1
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
@@ -55,11 +55,9 @@ int main(int argc, char* argv[])
 	pdr.setWorldPoint(1, 81.9f * s, 0.0f * s);
 	pdr.setWorldPoint(2, 81.9f * s, 61.3f * s);
 	pdr.setWorldPoint(3, 0.0f * s, 61.3f * s);
-
-
+	
 	pdr.solve();
 	
-
 	std::string inputFileName = "input.jpg";
 	std::string outputFileName = "output.jpg";
 	if (argc > 1)
@@ -78,6 +76,8 @@ int main(int argc, char* argv[])
 
 	QImage output(maxX - minX, maxY - minY, input.format());
 	output.fill(qRgb(0, 0, 0));
+
+	std::cout << "Output size: " << output.width() << ", " << output.height() << std::endl;
 
 	float dx = output.width() / (maxX - minX);
 	float dy = output.height() / (maxY - minY);

@@ -28,6 +28,8 @@ public slots:
 	virtual void render();
 	virtual void cleanup();
 	virtual void setImage(const QImage& image);
+	virtual int width() const { return renderFbo->width(); };
+	virtual int height() const { return renderFbo->height(); };
 	
 
 protected:	// methods

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
+    <width>1014</width>
     <height>600</height>
    </rect>
   </property>
@@ -14,18 +14,434 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="GLImageWidget" name="glImageWidget"/>
-    </item>
-   </layout>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>11</y>
+      <width>301</width>
+      <height>513</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>301</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QGroupBox" name="infoGroupBox">
+       <property name="title">
+        <string>Info</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="mousePosLabel">
+          <property name="text">
+           <string>Mouse</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="mousePosXLineEdit">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLineEdit" name="mousePosYLineEdit">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="imageSizeLabel">
+          <property name="text">
+           <string>Image Size</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="imageSizeXLineEdit">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="imageSizeYLineEdit">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="imagePointsGroupBox">
+       <property name="title">
+        <string>Image Points</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="imagePointX0Label">
+          <property name="text">
+           <string>Point 0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="imagePointX0SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QDoubleSpinBox" name="imagePointY0SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="imagePointX1Label">
+          <property name="text">
+           <string>Point 1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="imagePointX1SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="imagePointY1SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="imagePointX2Label">
+          <property name="text">
+           <string>Point 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="imagePointX2SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QDoubleSpinBox" name="imagePointY2SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="imagePointX3Label">
+          <property name="text">
+           <string>Point 3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QDoubleSpinBox" name="imagePointX3SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDoubleSpinBox" name="imagePointY3SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <double>99999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="worldPointsGroupBox">
+       <property name="title">
+        <string>World Points</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="worldPointX0Label_2">
+          <property name="text">
+           <string>Point 0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="worldPointX0SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QDoubleSpinBox" name="worldPointY0SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="worldPointX1Label">
+          <property name="text">
+           <string>Point 1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="worldPointX1SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+          <property name="value">
+           <double>81.900000000000006</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="worldPointY1SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="worldPointX2Label">
+          <property name="text">
+           <string>Point 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="worldPointX2SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+          <property name="value">
+           <double>81.900000000000006</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QDoubleSpinBox" name="worldPointY2SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+          <property name="value">
+           <double>61.299999999999997</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="worldPointX3Label">
+          <property name="text">
+           <string>Point 3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QDoubleSpinBox" name="worldPointX3SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDoubleSpinBox" name="worldPointY3SpinBox">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+          <property name="value">
+           <double>61.299999999999997</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="calculatePushButton">
+       <property name="text">
+        <string>Calculate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="imageGroupBox">
+       <property name="title">
+        <string>Image</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QRadioButton" name="inputRadioButton">
+          <property name="text">
+           <string>Input</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="outputRadioButton">
+          <property name="text">
+           <string>Output</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="GLImageWidget" name="glImageWidget">
+    <property name="geometry">
+     <rect>
+      <x>319</x>
+      <y>11</y>
+      <width>684</width>
+      <height>513</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>980</width>
+     <width>1014</width>
      <height>26</height>
     </rect>
    </property>
@@ -155,6 +571,8 @@
    <header>GLImageWidget.h</header>
    <slots>
     <signal>colorChanged()</signal>
+    <signal>mouseMove(int,int)</signal>
+    <signal>newPoint(int,int,int)</signal>
     <slot>enableChromaKey(bool)</slot>
     <slot>setThreshold(int)</slot>
     <slot>setSlope(int)</slot>
@@ -245,11 +663,96 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>glImageWidget</sender>
+   <signal>mouseMove(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onGLMouseMove(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>660</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>glImageWidget</sender>
+   <signal>newPoint(int,int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onNewPoint(int,int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>660</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>calculatePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onCalculateButtonPress()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>470</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>inputRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onInputImageToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>529</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>outputRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onOutputImageToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>529</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>fileOpen()</slot>
   <slot>fileSave()</slot>
   <slot>fileSaveAs()</slot>
   <slot>aboutDialogShow()</slot>
+  <slot>onGLMouseMove(int,int)</slot>
+  <slot>onNewPoint(int,int,int)</slot>
+  <slot>onCalculateButtonPress()</slot>
+  <slot>onInputImageToggled(bool)</slot>
+  <slot>onOutputImageToggled(bool)</slot>
  </slots>
 </ui>
