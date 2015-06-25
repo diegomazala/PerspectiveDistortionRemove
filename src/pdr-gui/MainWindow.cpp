@@ -131,29 +131,25 @@ void MainWindow::onCalculateButtonPress()
 
 	pdr.computImageSize(inputImage.width(), inputImage.height(), minX, maxX, minY, maxY);
 
-	outputImage = QImage(maxX - minX, maxY - minY, inputImage.format());
-	outputImage.fill(Qt::GlobalColor::black);
-	
-	float dx = outputImage.width() / (maxX - minX);
-	float dy = outputImage.height() / (maxY - minY);
+	float aspect = (maxX - minX) / (maxY - minY);
+	outputImage = QImage(inputImage.width(), inputImage.width() / aspect, inputImage.format());
+	outputImage.fill(qRgb(0, 0, 0));
 
-	for (int x = minX; x < maxX; ++x)
+	float dx = (maxX - minX) / outputImage.width();
+
+	for (int x = 0; x < outputImage.width(); ++x)
 	{
-		for (int y = minY; y < maxY; ++y)
+		for (int y = 0; y < outputImage.height(); ++y)
 		{
-			float img_x = 0;
-			float img_y = 0;
-			pdr.recoverPixel(x, y, img_x, img_y);
+			float tx = 0;
+			float ty = 0;
+			pdr.recoverPixel(minX + x * dx, minY + y * dx, tx, ty);
 
-			if (img_x > -1 && img_y > -1
-				&& img_x < inputImage.width()
-				&& img_y < inputImage.height())
+			if (tx > -1 && ty > -1
+				&& tx < inputImage.width()
+				&& ty < inputImage.height())
 			{
-				float tx = 0;
-				float ty = 0;
-				pdr.computePixel(img_x, img_y, tx, ty);
-
-				outputImage.setPixel((tx - minX) * dx, (ty - minY) * dy, inputImage.pixel(img_x, img_y));
+				outputImage.setPixel(x, y, inputImage.pixel(tx, ty));
 			}
 		}
 	}
@@ -168,6 +164,7 @@ void MainWindow::onInputImageToggled(bool toggled)
 	ui->glImageWidget->setImage(inputImage);
 	update();
 }
+
 
 void MainWindow::onOutputImageToggled(bool toggled)
 {

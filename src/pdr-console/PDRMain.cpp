@@ -67,55 +67,32 @@ int main(int argc, char* argv[])
 
 	pdr.computImageSize(input.width(), input.height(), minX, maxX, minY, maxY);
 
-	//QImage output(maxX - minX, maxY - minY, input.format());
-	QImage output(input.size(), input.format());
+	float aspect = (maxX - minX) / (maxY - minY);
+	QImage output(input.width(), input.width() / aspect, input.format());
 	output.fill(qRgb(0, 0, 0));
 
 	std::cout << "Output size: " << output.width() << ", " << output.height() << std::endl;
 
-
-#if 1
-	float dx = output.width() / (maxX - minX);
+	float dx = (maxX - minX) / output.width();
 	float dy = output.height() / (maxY - minY);
 
-	for (int x = minX; x < maxX; ++x)
+	for (int x = 0; x < output.width(); ++x)
 	{
-		for (int y = minY; y < maxY; ++y)
+		for (int y = 0; y < output.height(); ++y)
 		{
-			float img_x = 0;
-			float img_y = 0;
-			pdr.recoverPixel(x, y, img_x, img_y);
+			float tx = 0;
+			float ty = 0;
+			pdr.recoverPixel(minX + x * dx, minY + y * dx, tx, ty);
 
-			if (img_x > -1 && img_y > -1
-				&& img_x < input.width() 
-				&& img_y < input.height())
+			if (tx > -1 && ty > -1
+				&& tx < input.width()
+				&& ty < input.height())
 			{
-				float tx = 0;
-				float ty = 0;
-				pdr.computePixel(img_x, img_y, tx, ty);
-
-				output.setPixel((tx - minX) * dx, (ty - minY) * dy, input.pixel(img_x, img_y));
+				output.setPixel(x, y, input.pixel(tx, ty));
 			}
 		}
 	}
 
-#else
-
-	float dx = output.width() / (maxX - minX);
-	float dy = output.height() / (maxY - minY);
-
-	for (int x = 0; x < input.width(); ++x)
-	{
-		for (int y = 0; y < input.height(); ++y)
-		{
-			float tx = 0;
-			float ty = 0;
-			pdr.computePixel(x, y, tx, ty);
-
-			output.setPixel((tx - minX) * dx, (ty - minY) * dy, input.pixel(x, y));
-		}
-	}
-#endif
 	output.save(outputFileName.c_str());
 
 	return EXIT_SUCCESS;
