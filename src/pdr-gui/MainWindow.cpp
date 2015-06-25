@@ -137,15 +137,24 @@ void MainWindow::onCalculateButtonPress()
 	float dx = outputImage.width() / (maxX - minX);
 	float dy = outputImage.height() / (maxY - minY);
 
-	for (int x = 0; x < inputImage.width(); ++x)
+	for (int x = minX; x < maxX; ++x)
 	{
-		for (int y = 0; y < inputImage.height(); ++y)
+		for (int y = minY; y < maxY; ++y)
 		{
-			float tx = 0;
-			float ty = 0;
-			pdr.computePixel(x, y, tx, ty);
+			float img_x = 0;
+			float img_y = 0;
+			pdr.recoverPixel(x, y, img_x, img_y);
 
-			outputImage.setPixel((tx - minX) * dx, (ty - minY) * dy, inputImage.pixel(x, y));
+			if (img_x > -1 && img_y > -1
+				&& img_x < inputImage.width()
+				&& img_y < inputImage.height())
+			{
+				float tx = 0;
+				float ty = 0;
+				pdr.computePixel(img_x, img_y, tx, ty);
+
+				outputImage.setPixel((tx - minX) * dx, (ty - minY) * dy, inputImage.pixel(img_x, img_y));
+			}
 		}
 	}
 

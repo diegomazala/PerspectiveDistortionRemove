@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	std::cout << "Output size: " << output.width() << ", " << output.height() << std::endl;
 
 
-#if 0
+#if 1
 	float dx = output.width() / (maxX - minX);
 	float dy = output.height() / (maxY - minY);
 
