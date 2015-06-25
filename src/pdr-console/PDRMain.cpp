@@ -1,5 +1,4 @@
 #include <QApplication>
-#include "MainWindow.h"
 
 #include <QImage>
 #include "PDR.h"
@@ -19,15 +18,9 @@ static T Lerp(T const& x, T const& x0, T const& x1, T const& y0, T const& y1)
 
 int main(int argc, char* argv[])
 {
-#if 1
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
-	return a.exec();
 
-#else
 	// Usage Example:
-	// $ ./PDR.exe ../../data/brahma01.jpg ../../data/_output.jpg 1 > ../../data/out.txt
+	// $ ./pdr-console.exe ../../data/brahma01.jpg ../../data/_output.jpg 1
 
 	// image size = 800 x 600
 	
@@ -74,10 +67,39 @@ int main(int argc, char* argv[])
 
 	pdr.computImageSize(input.width(), input.height(), minX, maxX, minY, maxY);
 
-	QImage output(maxX - minX, maxY - minY, input.format());
+	//QImage output(maxX - minX, maxY - minY, input.format());
+	QImage output(input.size(), input.format());
 	output.fill(qRgb(0, 0, 0));
 
 	std::cout << "Output size: " << output.width() << ", " << output.height() << std::endl;
+
+
+#if 0
+	float dx = output.width() / (maxX - minX);
+	float dy = output.height() / (maxY - minY);
+
+	for (int x = minX; x < maxX; ++x)
+	{
+		for (int y = minY; y < maxY; ++y)
+		{
+			float img_x = 0;
+			float img_y = 0;
+			pdr.recoverPixel(x, y, img_x, img_y);
+
+			if (img_x > -1 && img_y > -1
+				&& img_x < input.width() 
+				&& img_y < input.height())
+			{
+				float tx = 0;
+				float ty = 0;
+				pdr.computePixel(img_x, img_y, tx, ty);
+
+				output.setPixel((tx - minX) * dx, (ty - minY) * dy, input.pixel(img_x, img_y));
+			}
+		}
+	}
+
+#else
 
 	float dx = output.width() / (maxX - minX);
 	float dy = output.height() / (maxY - minY);
@@ -93,8 +115,8 @@ int main(int argc, char* argv[])
 			output.setPixel((tx - minX) * dx, (ty - minY) * dy, input.pixel(x, y));
 		}
 	}
-
-	output.save(outputFileName.c_str());
-	return EXIT_SUCCESS;
 #endif
+	output.save(outputFileName.c_str());
+
+	return EXIT_SUCCESS;
 }

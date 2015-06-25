@@ -40,8 +40,18 @@ endif()
 include_directories( ${EIGEN3_INCLUDE_DIRS} )
 ######################################################################
 
-add_subdirectory (${PROJECT_SOURCE_DIR}/PDR)
 
+
+#######################################################################
+#################### SETUP OUTPUT DIRECTORY ###########################
+set( CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/lib_install )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} CACHE INTERNAL "Single Directory for all executables")
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} CACHE INTERNAL "Single Directory for all libraries")
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} CACHE INTERNAL "Single Directory for all libraries")
+#######################################################################
+
+
+add_subdirectory (${PROJECT_SOURCE_DIR})
 
 
 

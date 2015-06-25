@@ -5,7 +5,6 @@ get_filename_component(TARGET_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
 
 set  (SOURCE_FILES		
-						PDR.cpp
 						MainWindow.cpp 
 						GLRectangle.cpp
 						GLRenderTexture.cpp
@@ -13,7 +12,6 @@ set  (SOURCE_FILES
 						AppMain.cpp )
 
 set  (HEADER_FILES		
-						PDR.h
 						MainWindow.h
 						GLRectangle.h
 						GLRenderTexture.h
@@ -27,6 +25,7 @@ qt5_wrap_ui( HEADER_UI_FILES ${FORM_FILES} )
 
 source_group ("Form Files" FILES ${FORM_FILES})
 source_group ("Form Header Files" FILES ${HEADER_UI_FILES})
+source_group ("PDR Source" FILES ${PDR_SOURCE_FILES})
 
 include_directories (${CMAKE_SOURCE_DIR})
 
@@ -36,6 +35,7 @@ add_executable(
   ${SOURCE_FILES}
   ${HEADER_FILES}
   ${HEADER_UI_FILES}
+  ${PDR_SOURCE_FILES}
 )
 
 target_link_libraries (	
@@ -45,13 +45,4 @@ target_link_libraries (
 )
 
 
-
-
-#######################################################################
-#################### SETUP OUTPUT DIRECTORY ###########################
-set( CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/lib_install )
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} CACHE INTERNAL "Single Directory for all executables")
-set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} CACHE INTERNAL "Single Directory for all libraries")
-set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} CACHE INTERNAL "Single Directory for all libraries")
-#######################################################################
 

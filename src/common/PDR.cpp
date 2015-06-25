@@ -114,6 +114,15 @@ void PDR::computePixel(float x, float y, float& rx, float& ry) const
 }
 
 
+void PDR::recoverPixel(float x, float y, float& rx, float& ry) const
+{
+	Eigen::Vector3f p(x, y, 1.0f);
+	Eigen::Vector3f r = h * p;
+	rx = r.x() / r.z();
+	ry = r.y() / r.z();
+}
+
+
 //void PDR::computImageSize(float in_width, float in_height, float& out_width, float& out_height, float& shift_x, float& shift_y) const
 void PDR::computImageSize(float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const
 {
