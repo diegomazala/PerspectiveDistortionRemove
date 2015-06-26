@@ -3,7 +3,7 @@
 #include <QImage>
 #include "PDR.h"
 #include <iostream>
-
+#include <fstream>
 
 
 
@@ -16,65 +16,120 @@ static T Lerp(T const& x, T const& x0, T const& x1, T const& y0, T const& y1)
 }
 
 
+QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy)
+{
+	float x0 = x - dx;
+	float x1 = x + dx;
+	float y0 = y - dy;
+	float y1 = y + dy;
+
+	QRgb rgb_xlt = (x0 > -1 && y0 > -1) ? img.pixel(x0, y0) : img.pixel(x, y);
+	QRgb rgb_xrt = (x1 < img.width() && y0 > -1) ? img.pixel(x1, y0) : img.pixel(x, y);
+
+	QRgb rgb_xlb = (x0 > -1 && y1 < img.height()) ? img.pixel(x0, y1) : img.pixel(x, y);
+	QRgb rgb_xrb = (x1 < img.width() && y1 < img.height()) ? img.pixel(x1, y1) : img.pixel(x, y);
+
+	int r = (0.25f * qRed(rgb_xlt)) + (0.25f * qRed(rgb_xrt)) + (0.25f * qRed(rgb_xlb)) + (0.25f * qRed(rgb_xrb));
+	int g = (0.25f * qGreen(rgb_xlt)) + (0.25f * qGreen(rgb_xrt)) + (0.25f * qGreen(rgb_xlb)) + (0.25f * qGreen(rgb_xrb));
+	int b = (0.25f * qBlue(rgb_xlt)) + (0.25f * qBlue(rgb_xrt)) + (0.25f * qBlue(rgb_xlb)) + (0.25f * qBlue(rgb_xrb));
+
+	return qRgb(r, g, b);
+}
+
+
 int main(int argc, char* argv[])
 {
+	if (argc < 2)
+	{
+		std::cerr << "Error: Missing parameters.\n"
+			<< "Usage: <app.exe> <config_file>"
+			<< std::endl;
+		return EXIT_FAILURE;
+	}
 
-	// Usage Example:
-	// $ ./pdr-console.exe ../../data/brahma01.jpg ../../data/_output.jpg 1
+	std::cout.precision(2);		// output info
 
-	// image size = 800 x 600
-	
-	// image points
-	// 324, 52
-	// 631, 113
-	// 633, 412
-	// 350, 560
-
-	// world points
-	// 0, 0
-	// 81.9, 0
-	// 81.9, 61.3
-	// 0, 61.3
-
-	float s = atof(argv[3]);
 	PDR pdr(4);
 
-	pdr.setImagePoint(0, 324, 52);
-	pdr.setImagePoint(1, 631, 113);
-	pdr.setImagePoint(2, 633, 412);
-	pdr.setImagePoint(3, 350, 560);
+	std::string inputFileName = "input.png";
+	std::string outputFileName = "output.png";
+	float scale = 1.0f;
+	bool interpolate = true;
 
-	pdr.setWorldPoint(0, 0.0f * s, 0.0f * s);
-	pdr.setWorldPoint(1, 81.9f * s, 0.0f * s);
-	pdr.setWorldPoint(2, 81.9f * s, 61.3f * s);
-	pdr.setWorldPoint(3, 0.0f * s, 61.3f * s);
+	std::ifstream config(argv[1]);
+	if (config.is_open())
+	{
+		for (std::string line; std::getline(config, line);)
+		{
+			if (line.empty())
+				continue;
+
+			std::istringstream iss(line);
+			std::vector<std::string> str_list{ 
+						std::istream_iterator<std::string>{iss},
+						std::istream_iterator<std::string>{} };
+
+
+			if (str_list[0] == "input")
+			{
+				inputFileName = str_list[1];
+			}
+			else if (str_list[0] == "output")
+			{
+				outputFileName = str_list[1];
+			}
+			else if (str_list[0] == "interpolation")
+			{
+				interpolate = !(str_list[1] == "off");
+			}
+			else if (str_list[0] == "scale")
+			{
+				scale = std::stof(str_list[1]);
+			}
+			else if (str_list[0] == "image_points")
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					float x, y;
+					config >> x >> y;
+					pdr.setImagePoint(i, x, y);
+				}
+			}
+			else if (str_list[0] == "world_points")
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					float x, y;
+					config >> x >> y;
+					pdr.setWorldPoint(i, x * scale, y * scale);
+				}
+			}
+
+		}
+		config.close();
+	}
 	
 	pdr.solve();
 	
-	std::string inputFileName = "input.jpg";
-	std::string outputFileName = "output.jpg";
-	if (argc > 1)
-		inputFileName = argv[1];
-	if (argc > 2)
-		outputFileName = argv[2];
-
 	QImage input(inputFileName.c_str());
 	
-	float minX = 0;
-	float maxX = 0;
-	float minY = 0;
-	float maxY = 0;
+	float xmin = 0;
+	float xmax = 0;
+	float ymin = 0;
+	float ymax = 0;
 
-	pdr.computImageSize(input.width(), input.height(), minX, maxX, minY, maxY);
+	pdr.computImageSize(input.width(), input.height(), xmin, xmax, ymin, ymax);
 
-	float aspect = (maxX - minX) / (maxY - minY);
+	float aspect = (xmax - xmin) / (ymax - ymin);
 	QImage output(input.width(), input.width() / aspect, input.format());
 	output.fill(qRgb(0, 0, 0));
 
 	std::cout << "Output size: " << output.width() << ", " << output.height() << std::endl;
 
-	float dx = (maxX - minX) / output.width();
-	float dy = output.height() / (maxY - minY);
+	float dx = (xmax - xmin) / float(output.width());
+	float dy = (ymax - ymin) / float(output.height());
+
+	std::cout << std::fixed << "dx, dy: " << dx << ", " << dy << std::endl;
 
 	for (int x = 0; x < output.width(); ++x)
 	{
@@ -82,13 +137,21 @@ int main(int argc, char* argv[])
 		{
 			float tx = 0;
 			float ty = 0;
-			pdr.recoverPixel(minX + x * dx, minY + y * dx, tx, ty);
+			pdr.recoverPixel(xmin + x * dx, ymin + y * dx, tx, ty);
 
 			if (tx > -1 && ty > -1
 				&& tx < input.width()
 				&& ty < input.height())
 			{
-				output.setPixel(x, y, input.pixel(tx, ty));
+				if (interpolate)
+				{
+					QRgb rgb = bilinearInterpol(input, tx, ty, 0.5f, 0.5f);
+					output.setPixel(x, y, rgb);
+				}
+				else
+				{
+					output.setPixel(x, y, input.pixel(tx, ty));
+				}
 			}
 		}
 	}

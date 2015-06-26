@@ -38,8 +38,6 @@ void PDR::setImagePoint(int index, float x, float y)
 
 void PDR::solve()
 {
-	std::cout.precision(0);
-
 	for (int i = 0; i < pointCount; ++i)			// setting vector b
 	{
 		b[i * 2 + 0] = imagePoints[i].x();
@@ -101,8 +99,6 @@ void PDR::solve()
 	h(rows - 1, cols - 1) = 1.0f;
 
 	std::cout << "\n\nH:\n" << h << std::endl << std::endl;
-
-
 }
 
 void PDR::computePixel(float x, float y, float& rx, float& ry) const
@@ -123,7 +119,6 @@ void PDR::recoverPixel(float x, float y, float& rx, float& ry) const
 }
 
 
-//void PDR::computImageSize(float in_width, float in_height, float& out_width, float& out_height, float& shift_x, float& shift_y) const
 void PDR::computImageSize(float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const
 {
 	Eigen::Vector3f p[4] = { 
@@ -139,7 +134,7 @@ void PDR::computImageSize(float in_width, float in_height, float& min_x, float& 
 		r[i] = h.inverse() * p[i];
 		r[i] = Eigen::Vector3f(r[i].x() / r[i].z(), r[i].y() / r[i].z(), 1.0f);
 
-		std::cout << std::fixed
+		std::cout 
 				<< "p[" << i << "] : (" << p[i].x() << ", " << p[i].y() << ")  \t\t" 
 				<< "r[" << i << "] : (" << r[i].x() << ", " << r[i].y() << ")" << std::endl;
 	}
@@ -168,7 +163,4 @@ void PDR::computImageSize(float in_width, float in_height, float& min_x, float& 
 
 	std::cout << "\n\nMinMax : (" << min_x << "," << min_y << ") (" << max_x << ", " << max_y << ")" << std::endl;
 	std::cout << "Image Size: " << max_x - min_x << ", " << max_y - min_y << std::endl;
-
-	//out_width = max_x - min_x;
-	//out_height = max_y - min_y;
 }

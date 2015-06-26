@@ -1,0 +1,18 @@
+input		../../data/brahma01.jpg 
+output	../../data/_output.jpg 
+
+interpolation on
+
+scale 1
+
+image_points
+324 52
+631 113
+633 412
+350 560
+
+world_points
+0 0
+81.9 0
+81.9 61.3
+0 61.3
