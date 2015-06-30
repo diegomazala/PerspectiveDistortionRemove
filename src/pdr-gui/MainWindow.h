@@ -43,4 +43,6 @@ private:
 	QImage outputImage;
 };
 
+static QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy);
+
 #endif // _MAIN_WINDOW_H_

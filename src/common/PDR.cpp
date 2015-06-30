@@ -119,13 +119,31 @@ void PDR::recoverPixel(float x, float y, float& rx, float& ry) const
 }
 
 
-void PDR::computImageSize(float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const
+void PDR::computImageSize(float& min_x, float& max_x, float& min_y, float& max_y) const
+{
+	std::vector<float> x;
+	std::vector<float> y;
+	float xmax = imagePoints[0].x();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		x.push_back(imagePoints[i].x());
+		y.push_back(imagePoints[i].y());
+	}
+	std::sort(x.begin(), x.end());
+	std::sort(y.begin(), y.end());
+
+	computImageSize(x[1], y[1], x[2], y[2], min_x, max_x, min_y, max_y);
+}
+
+void PDR::computImageSize(float in_x, float in_y, float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const
 {
 	Eigen::Vector3f p[4] = { 
-		{ 0, 0, 1.0f }, 
-		{ float(in_width), 0, 1.0f }, 
-		{ float(in_width), float(in_height), 1.0f }, 
-		{ 0, float(in_height), 1.0f } };
+		{ in_x, in_y, 1.0f }, 
+		{ in_width, in_y, 1.0f }, 
+		{ in_width, in_height, 1.0f }, 
+		{ in_x, in_height, 1.0f } };
+
 
 	Eigen::Vector3f r[4];
 
@@ -164,3 +182,5 @@ void PDR::computImageSize(float in_width, float in_height, float& min_x, float& 
 	std::cout << "\n\nMinMax : (" << min_x << "," << min_y << ") (" << max_x << ", " << max_y << ")" << std::endl;
 	std::cout << "Image Size: " << max_x - min_x << ", " << max_y - min_y << std::endl;
 }
+
+

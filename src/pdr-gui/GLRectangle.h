@@ -23,10 +23,12 @@ public:
 	GLRectangle(QObject *parent = 0);
 	virtual ~GLRectangle();
 
-	public slots:
+public slots:
 	virtual void initialize();
 	virtual void render();
 	virtual void cleanup();
+	void onEnable(bool enable);
+	void reset();
 
 	void setVertex(int index, QVector3D v);
 	void setVertices(const QVector<QVector3D>& verts);
@@ -46,6 +48,7 @@ protected: // attributes
 	QVector<QVector3D> vertices;
 	bool drawVertices;
 	GLenum drawMode;
+	bool enabled;
 };
 
 

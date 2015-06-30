@@ -28,10 +28,16 @@ GLImageWidget::~GLImageWidget()
 }
 
 
+void GLImageWidget::setRectEnable(bool enabled)
+{
+	rect.onEnable(enabled);
+}
+
 void GLImageWidget::setImage(const QImage& inputImage)
 {
 	makeCurrent();
 	renderTexture.setImage(inputImage);
+	rect.reset();
 	update();
 }
 

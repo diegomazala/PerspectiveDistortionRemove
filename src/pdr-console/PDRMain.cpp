@@ -118,7 +118,8 @@ int main(int argc, char* argv[])
 	float ymin = 0;
 	float ymax = 0;
 
-	pdr.computImageSize(input.width(), input.height(), xmin, xmax, ymin, ymax);
+	//pdr.computImageSize(0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
+	pdr.computImageSize(xmin, xmax, ymin, ymax);
 
 	float aspect = (xmax - xmin) / (ymax - ymin);
 	QImage output(input.width(), input.width() / aspect, input.format());
@@ -145,7 +146,7 @@ int main(int argc, char* argv[])
 			{
 				if (interpolate)
 				{
-					QRgb rgb = bilinearInterpol(input, tx, ty, 0.5f, 0.5f);
+					QRgb rgb = bilinearInterpol(input, tx, ty, dx, dy);
 					output.setPixel(x, y, rgb);
 				}
 				else

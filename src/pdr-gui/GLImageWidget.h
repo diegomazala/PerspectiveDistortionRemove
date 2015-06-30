@@ -32,6 +32,7 @@ public slots:
 	virtual void cleanup();
 	void setImage(const QImage& image);
 	void setImage(const QString& fileimage);
+	void setRectEnable(bool enabled);
 	
 signals:
 	void mouseMove(int, int);

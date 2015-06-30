@@ -5,7 +5,8 @@
 
 GLRectangle::GLRectangle(QObject *parent)
 	: QObject(parent),
-	drawMode(GL_POINTS)
+	drawMode(GL_POINTS),
+	enabled(true)
 {
 	vertices << QVector3D(-1.0f, -1.0f, 0.0f)
 		<< QVector3D(-1.0f, 1.0f, 0.0f)
@@ -18,7 +19,10 @@ GLRectangle::~GLRectangle()
 {
 }
 
-
+void GLRectangle::onEnable(bool enable)
+{
+	enabled = enable;
+}
 
 
 
@@ -50,8 +54,8 @@ void GLRectangle::setDrawMode(GLenum draw_mode)
 
 void GLRectangle::setVertex(int index, QVector3D v)
 {
-	vertices[index] = v;
-	//updateVertexBuffer();
+	for (int i = index; i < vertices.size(); i++)
+		vertices[index] = v;
 
 	vbo->bind();
 	vbo->write(index * sizeof(QVector3D), &v[0], sizeof(QVector3D));
@@ -61,6 +65,15 @@ void GLRectangle::setVertex(int index, QVector3D v)
 void GLRectangle::setVertices(const QVector<QVector3D>& verts)
 {
 	vertices = verts;
+	updateVertexBuffer();
+}
+
+
+void GLRectangle::reset()
+{
+	drawMode = GL_POINTS;
+	vertices.clear();
+	vertices << QVector3D(0, 0, 0) << QVector3D(0, 0, 0) << QVector3D(0, 0, 0) << QVector3D(0, 0, 0);
 	updateVertexBuffer();
 }
 
@@ -76,6 +89,9 @@ void GLRectangle::updateVertexBuffer()
 
 void GLRectangle::render()
 {
+	if (!enabled)
+		return;
+
 	vao.bind();
 	program->bind();
 	QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();

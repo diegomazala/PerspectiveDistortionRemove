@@ -17,7 +17,8 @@ public:
 	void solve();
 	void computePixel(float x, float y, float& rx, float& ry) const;
 	void recoverPixel(float x, float y, float& rx, float& ry) const;
-	void computImageSize(float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const;
+	void computImageSize(float& min_x, float& max_x, float& min_y, float& max_y) const;
+	void computImageSize(float in_x, float in_y, float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const;
 
 	Eigen::MatrixXf hInverse() const { return h.inverse(); };
 

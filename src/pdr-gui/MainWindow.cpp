@@ -4,8 +4,30 @@
 #include "ui_MainWindow.h"
 #include <QKeyEvent>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <iostream>
 
+
+
+static QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy)
+{
+	float x0 = x - dx;
+	float x1 = x + dx;
+	float y0 = y - dy;
+	float y1 = y + dy;
+
+	QRgb rgb_xlt = (x0 > -1 && y0 > -1) ? img.pixel(x0, y0) : img.pixel(x, y);
+	QRgb rgb_xrt = (x1 < img.width() && y0 > -1) ? img.pixel(x1, y0) : img.pixel(x, y);
+
+	QRgb rgb_xlb = (x0 > -1 && y1 < img.height()) ? img.pixel(x0, y1) : img.pixel(x, y);
+	QRgb rgb_xrb = (x1 < img.width() && y1 < img.height()) ? img.pixel(x1, y1) : img.pixel(x, y);
+
+	int r = (0.25f * qRed(rgb_xlt)) + (0.25f * qRed(rgb_xrt)) + (0.25f * qRed(rgb_xlb)) + (0.25f * qRed(rgb_xrb));
+	int g = (0.25f * qGreen(rgb_xlt)) + (0.25f * qGreen(rgb_xrt)) + (0.25f * qGreen(rgb_xlb)) + (0.25f * qGreen(rgb_xrb));
+	int b = (0.25f * qBlue(rgb_xlt)) + (0.25f * qBlue(rgb_xrt)) + (0.25f * qBlue(rgb_xlb)) + (0.25f * qBlue(rgb_xrb));
+
+	return qRgb(r, g, b);
+}
 
 MainWindow::MainWindow(QWidget *parent) : 
 			QMainWindow(parent),
@@ -20,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	inputImage.fill(Qt::GlobalColor::black);
 	outputImage.fill(Qt::GlobalColor::black);
 
-	//ui->glImageWidget->setImage(QImage("../../../data/brahma01.jpg"));
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +52,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::fileOpen()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "../../../data", tr("Images (*.png *.bmp *.jpg *.tif)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "../../data", tr("Images (*.png *.bmp *.jpg *.tif)"));
 
 	if (!fileName.isEmpty())
 	{
@@ -74,6 +95,19 @@ void MainWindow::fileSaveAs()
 
 void MainWindow::aboutDialogShow()
 {
+	QString message
+		("<p>Perspective distortion remove algorithm using Qt and Opengl" \
+		"<p><p>" \
+		"<br>   Usage: <br>" \
+		"<br>   1. Select 4 points on the image. It can be input on left panel or keeping control key pressed and left click over the points.<br>" \
+		"<br>   2. Input the 4 world points on the left panel. It must have the same order that you used for input image points. <br>" \
+		"<br>   3. Press calculate button <br>" \
+		"<p><p><p>" \
+		"<p>Developed by: Diego Mazala, June-2015" \
+		"<p>");
+
+	QMessageBox::about(this, tr("Perspective Distortion Remove"), message);
+
 }
 
 
@@ -124,18 +158,20 @@ void MainWindow::onCalculateButtonPress()
 
 	pdr.solve();
 
-	float minX = 0;
-	float maxX = 0;
-	float minY = 0;
-	float maxY = 0;
+	float xmin = 0;
+	float xmax = 0;
+	float ymin = 0;
+	float ymax = 0;
 
-	pdr.computImageSize(inputImage.width(), inputImage.height(), minX, maxX, minY, maxY);
+	//pdr.computImageSize(0, 0, inputImage.width(), inputImage.height(), xmin, xmax, ymin, ymax);
+	pdr.computImageSize(xmin, xmax, ymin, ymax);
 
-	float aspect = (maxX - minX) / (maxY - minY);
+	float aspect = (xmax - xmin) / (ymax - ymin);
 	outputImage = QImage(inputImage.width(), inputImage.width() / aspect, inputImage.format());
 	outputImage.fill(qRgb(0, 0, 0));
 
-	float dx = (maxX - minX) / outputImage.width();
+	float dx = (xmax - xmin) / float(outputImage.width());
+	float dy = (ymax - ymin) / float(outputImage.height());
 
 	for (int x = 0; x < outputImage.width(); ++x)
 	{
@@ -143,13 +179,15 @@ void MainWindow::onCalculateButtonPress()
 		{
 			float tx = 0;
 			float ty = 0;
-			pdr.recoverPixel(minX + x * dx, minY + y * dx, tx, ty);
+			pdr.recoverPixel(xmin + x * dx, ymin + y * dx, tx, ty);
 
 			if (tx > -1 && ty > -1
 				&& tx < inputImage.width()
 				&& ty < inputImage.height())
 			{
-				outputImage.setPixel(x, y, inputImage.pixel(tx, ty));
+				QRgb rgb = bilinearInterpol(inputImage, tx, ty, dx, dy);
+				outputImage.setPixel(x, y, rgb);
+				//outputImage.setPixel(x, y, input.pixel(tx, ty));	// no interpolation
 			}
 		}
 	}
@@ -162,6 +200,7 @@ void MainWindow::onCalculateButtonPress()
 void MainWindow::onInputImageToggled(bool toggled)
 {
 	ui->glImageWidget->setImage(inputImage);
+	ui->glImageWidget->setRectEnable(true);
 	update();
 }
 
@@ -169,5 +208,6 @@ void MainWindow::onInputImageToggled(bool toggled)
 void MainWindow::onOutputImageToggled(bool toggled)
 {
 	ui->glImageWidget->setImage(outputImage);
+	ui->glImageWidget->setRectEnable(false);
 	update();
 }
