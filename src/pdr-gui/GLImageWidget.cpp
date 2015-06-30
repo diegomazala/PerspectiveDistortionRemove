@@ -40,6 +40,8 @@ void GLImageWidget::setImage(const QImage& inputImage)
 	renderTexture.setImage(inputImage);
 	rect.reset();
 	update();
+
+	setFocus();
 }
 
 
