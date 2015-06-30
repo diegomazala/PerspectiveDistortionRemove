@@ -12,6 +12,7 @@ GLImageWidget::GLImageWidget(QWidget *parent)
 	currentVertexIndex(0)
 {
 	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+	setFocus();
 	//setFlag(Qt::WA_Hover);
 	setMouseTracking(true);
 
@@ -114,7 +115,7 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 
 	if (event->button() == Qt::MouseButton::LeftButton)
 	{
-		if (Qt::ControlModifier == QApplication::keyboardModifiers())
+		if (Qt::ControlModifier == QApplication::keyboardModifiers() || Qt::ShiftModifier == QApplication::keyboardModifiers())
 		{
 			if (currentVertexIndex < 4)
 			{
@@ -140,27 +141,36 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void GLImageWidget::mouseMoveEvent(QMouseEvent *event)
 {
-	int x = float(event->x()) / float(width()) * float(renderTexture.width());
-	int y = float(event->y()) / float(height()) * float(renderTexture.height());
+	int ximg = float(event->x()) / float(width()) * float(renderTexture.width());
+	int yimg = float(event->y()) / float(height()) * float(renderTexture.height());
+	emit mouseMove(ximg, yimg);
 
-	emit mouseMove(x, y);
+	// normalizing values [(-1,-1):(1,1)]
+	float x = float(event->x()) / float(width()) * 2.0f - 1.0f;
+	float y = (float(event->y()) / float(height()) * 2.0f - 1.0f) * (-1.0f);	// inverting y coordinate
+	float z = 0.f;
+
+	if (currentVertexIndex < 4)
+		rect.setVertex(currentVertexIndex, QVector3D(x, y, z));
+
+	update();
 }
 
 
 void GLImageWidget::keyReleaseEvent(QKeyEvent *event)
 {
-	switch (event->key())
-	{
-	case Qt::Key_Control:
-		rect.setDrawMode(GL_LINE_LOOP);
-		currentVertexIndex = 0;
-		break;
+	//switch (event->key())
+	//{
+	//case Qt::Key_Control:
+	//	rect.setDrawMode(GL_LINE_LOOP);
+	//	currentVertexIndex = 0;
+	//	break;
 
-	default:
-		QWidget::keyReleaseEvent(event);
-	}
+	//default:
+	//	QWidget::keyReleaseEvent(event);
+	//}
 
-	update();
+	//update();
 }
 
 
@@ -171,6 +181,19 @@ void GLImageWidget::keyPressEvent(QKeyEvent *event)
 		
 	case Qt::Key_Control:
 		currentVertexIndex = 0;
+		rect.setDrawMode(GL_LINE_LOOP);
+		break;
+
+	case Qt::Key_Shift:
+		currentVertexIndex = 0;
+		rect.setDrawMode(GL_POINTS);
+		break;
+
+	case Qt::Key_L:
+		rect.setDrawMode(GL_LINE_LOOP);
+		break;
+
+	case Qt::Key_P:
 		rect.setDrawMode(GL_POINTS);
 		break;
 
