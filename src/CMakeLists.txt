@@ -11,6 +11,7 @@ include_directories(${PDR_SOURCE_DIR})
 
 add_subdirectory (pdr-console)
 add_subdirectory (pdr-gui)
+add_subdirectory (metric-retification)
 
 
 
