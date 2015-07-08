@@ -84,13 +84,6 @@ void GLImageWidget::initializeGL()
 
 	renderTexture.initialize();
 	lines.initialize();
-
-
-
-	lines.setVertexLine(0, 0, QVector3D(-0.1f, -0.1f, 0.0f));
-	lines.setVertexLine(0, 1, QVector3D(0.1f, 0.1f, 0.0f));
-	//lines.setVertexLine(1, 0, QVector3D(0.5f, -0.5f, 0.0f));
-	//lines.setVertexLine(1, 1, QVector3D(0.5f, 0.5f, 0.0f));
 }
 
 

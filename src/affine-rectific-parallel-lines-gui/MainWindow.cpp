@@ -123,7 +123,6 @@ void MainWindow::onGLMouseMove(int x, int y)
 
 void MainWindow::onNewPoint(int line_index, int vertex_index, int x, int y)
 {
-	std::cout << "new point: " << line_index << ", " << vertex_index << ", " << x << ", " << y << std::endl;
 	switch (line_index)
 	{
 	case 0:

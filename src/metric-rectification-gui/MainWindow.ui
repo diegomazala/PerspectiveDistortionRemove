@@ -159,7 +159,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line0x1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line0x1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -172,7 +172,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line0y1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line0y1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -222,7 +222,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line1x1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line1x1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -235,7 +235,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line1y1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line1y1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -285,7 +285,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line2x1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line2x1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -298,7 +298,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line2y1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line2y1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -348,7 +348,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line3x1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line3x1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -361,7 +361,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line3y1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line3y1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -411,7 +411,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line4x1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line4x1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>
@@ -424,7 +424,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line4y1SpinBox_2">
+             <widget class="QDoubleSpinBox" name="line4y1SpinBox">
               <property name="frame">
                <bool>false</bool>
               </property>

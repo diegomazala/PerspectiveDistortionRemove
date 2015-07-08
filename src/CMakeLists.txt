@@ -35,6 +35,7 @@ add_subdirectory (pdr-console)
 add_subdirectory (pdr-gui)
 add_subdirectory (parallel-lines-vanishing-points-console)
 add_subdirectory (affine-rectific-parallel-lines-gui)
+add_subdirectory (metric-rectification-gui)
 
 
 

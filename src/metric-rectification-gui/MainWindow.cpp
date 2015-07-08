@@ -125,22 +125,54 @@ void MainWindow::onNewPoint(int line_index, int vertex_index, int x, int y)
 {
 	switch (line_index)
 	{
-	//case 0:
-	//	ui->line0x0SpinBox->setValue(x);
-	//	ui->line0y0SpinBox->setValue(x);
-	//	break;
-	//case 1:
-	//	ui->imagePointX1SpinBox->setValue(x);
-	//	ui->imagePointY1SpinBox->setValue(y);
-	//	break;
-	//case 2:
-	//	ui->imagePointX2SpinBox->setValue(x);
-	//	ui->imagePointY2SpinBox->setValue(y);
-	//	break;
-	//case 3:
-	//	ui->imagePointX3SpinBox->setValue(x);
-	//	ui->imagePointY3SpinBox->setValue(y);
-	//	break;
+	case 0:
+		if (vertex_index == 0)
+		{
+			ui->line0x0SpinBox->setValue(x);
+			ui->line0y0SpinBox->setValue(y);
+		}
+		else
+		{
+			ui->line0x1SpinBox->setValue(x);
+			ui->line0y1SpinBox->setValue(y);
+		}
+		break;
+	case 1:
+		if (vertex_index == 0)
+		{
+			ui->line1x0SpinBox->setValue(x);
+			ui->line1y0SpinBox->setValue(y);
+		}
+		else
+		{
+			ui->line1x1SpinBox->setValue(x);
+			ui->line1y1SpinBox->setValue(y);
+		}
+		break;
+	case 2:
+		if (vertex_index == 0)
+		{
+			ui->line2x0SpinBox->setValue(x);
+			ui->line2y0SpinBox->setValue(y);
+		}
+		else
+		{
+			ui->line2x1SpinBox->setValue(x);
+			ui->line2y1SpinBox->setValue(y);
+		}
+		break;
+	case 3:
+		if (vertex_index == 0)
+		{
+			ui->line3x0SpinBox->setValue(x);
+			ui->line3y0SpinBox->setValue(y);
+		}
+		else
+		{
+			ui->line3x1SpinBox->setValue(x);
+			ui->line3y1SpinBox->setValue(y);
+		}
+		break;
 	default:
 		break;
 	}
