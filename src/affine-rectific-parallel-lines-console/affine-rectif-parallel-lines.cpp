@@ -3,123 +3,80 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <fstream>
-#include <interpolation.h>
+//#include <interpolation.h>
+#include "Arpl.h"
 
-
-void computImageSize(Eigen::Matrix3f h, float in_x, float in_y, float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y)
+void readConfigFile(const char* config_file, Arpl& arpl, std::string& input_file_name, std::string& output_file_name, bool& interpolate)
 {
-	Eigen::Vector3f p[4] = {
-		{ in_x, in_y, 1.0f },
-		{ in_width, in_y, 1.0f },
-		{ in_width, in_height, 1.0f },
-		{ in_x, in_height, 1.0f } };
-
-
-	Eigen::Vector3f r[4];
-
-	for (int i = 0; i < 4; ++i)
+	std::ifstream config(config_file);
+	if (config.is_open())
 	{
-		//r[i] = h.inverse() * p[i];
-		r[i] = h * p[i];
-		r[i] = Eigen::Vector3f(r[i].x() / r[i].z(), r[i].y() / r[i].z(), 1.0f);
+		for (std::string line; std::getline(config, line);)
+		{
+			if (line.empty())
+				continue;
 
-		std::cout
-			<< "p[" << i << "] : (" << p[i].x() << ", " << p[i].y() << ")  \t\t"
-			<< "r[" << i << "] : (" << r[i].x() << ", " << r[i].y() << ")" << std::endl;
+			std::istringstream iss(line);
+			std::vector<std::string> str_list{
+				std::istream_iterator<std::string>{iss},
+				std::istream_iterator<std::string>{} };
+
+
+			if (str_list[0] == "input")
+			{
+				input_file_name = str_list[1];
+			}
+			else if (str_list[0] == "output")
+			{
+				output_file_name = str_list[1];
+			}
+			else if (str_list[0] == "interpolation")
+			{
+				interpolate = !(str_list[1] == "off");
+			}
+			else if (str_list[0] == "lines_image_points")
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					float x0, y0, x1, y1;
+					config >> x0 >> y0 >> x1 >> y1;
+					arpl.setLinePoint(i, x0, y0, x1, y1);
+				}
+			}
+		}
+		config.close();
 	}
-
-	min_x = r[0].x();
-	max_x = r[0].x();
-
-	min_y = r[0].y();
-	max_y = r[0].y();
-
-	for (int i = 1; i < 4; ++i)
-	{
-		if (r[i].x() < min_x)
-			min_x = r[i].x();
-
-		if (r[i].y() < min_y)
-			min_y = r[i].y();
-
-		if (r[i].x() > max_x)
-			max_x = r[i].x();
-
-		if (r[i].y() > max_y)
-			max_y = r[i].y();
-	}
-
-
-	std::cout << "\n\nMinMax : (" << min_x << "," << min_y << ") (" << max_x << ", " << max_y << ")" << std::endl;
-	std::cout << "Image Size: " << max_x - min_x << ", " << max_y - min_y << std::endl;
 }
 
-
-void multiplyPixelMatrix(float x, float y, Eigen::Matrix3f h, float& rx, float& ry)
-{
-	Eigen::Vector3f p(x, y, 1.0f);
-	Eigen::Vector3f r = h * p;
-	rx = r.x() / r.z();
-	ry = r.y() / r.z();
-}
-
+// Example usage:  $./affine-rectific-parallel-lines-console.exe ../../data/config-affine-rectific-parallel-lines.txt
 int main(int argc, char* argv[])
 {
-	Eigen::Vector3f p0(200, 278, 1);
-	Eigen::Vector3f p1(127, 215, 1);
-	Eigen::Vector3f p2(270, 212, 1);
-	Eigen::Vector3f p3(199, 163, 1);
+	if (argc < 2)
+	{
+		std::cerr << "Error: Missing parameters.\n"
+			<< "Usage: <app.exe> <config_file>"
+			<< std::endl;
+		return EXIT_FAILURE;
+	}
 
-	Eigen::Vector3f l0 = p1 - p0;
-	Eigen::Vector3f l1 = p3 - p2;
-	l0.z() = 1.0f;
-	l1.z() = 1.0f;
+	Arpl arpl;
+	std::string inputFileName = "input.png";
+	std::string outputFileName = "output.png";
+	bool interpolate = true;
 
-	std::cout << "l0 : " << l0.x() << ", " << l0.y() << ", " << l0.z() << std::endl;
-	std::cout << "l1 : " << l1.x() << ", " << l1.y() << ", " << l1.z() << std::endl;
-
-	Eigen::Vector3f l2 = p2 - p0;
-	Eigen::Vector3f l3 = p1 - p3;
-	l2.z() = 1.0f;
-	l3.z() = 1.0f;
-
-	std::cout << "l2 : " << l2.x() << ", " << l2.y() << ", " << l2.z() << std::endl;
-	std::cout << "l3 : " << l3.x() << ", " << l3.y() << ", " << l3.z() << std::endl;
-
-	Eigen::Vector3f x0 = l0.cross(l1);
-	Eigen::Vector3f x1 = l2.cross(l3);
-
-	std::cout << "x0 : " << x0.x() << ", " << x0.y() << ", " << x0.z() << std::endl;
-	std::cout << "x1 : " << x1.x() << ", " << x1.y() << ", " << x1.z() << std::endl;
-
-	Eigen::Vector3f l = x1.cross(x0);
-
-	std::cout.precision(5);		// output info
-	std::cout << std::fixed << "line : " << l.x() << ", " << l.y() << ", " << l.z() << std::endl << std::endl;
-	l.normalize();
-	//l.x() = l.x() / l.z();
-	//l.y() = l.y() / l.z();
-	//l.z() = 1.0f;
-	std::cout << std::fixed << "line : " << l.x() << ", " << l.y() << ", " << l.z() << std::endl << std::endl;
-
-	Eigen::Matrix3f H = Eigen::Matrix3f::Identity();
-	H.row(2) = l;
-
-	std::cout << std::fixed << "Matrix H: : " << H << std::endl << std::endl;
-		
+	readConfigFile(argv[1], arpl, inputFileName, outputFileName, interpolate);
 	
-	//QImage input(inputFileName.c_str());
-	QImage input("G:/Projects/PerspectiveDistortionRemove/data/floor.jpg");
-	
+	arpl.computeHMatrix();
+
+	QImage input(inputFileName.c_str());
+
 	Eigen::Vector3f img(input.width(), input.height(), 1.0f);
 
 	float xmin = 0;
 	float xmax = 0;
 	float ymin = 0;
 	float ymax = 0;
-
-	computImageSize(H, 0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
-	
+	arpl.computImageSize(0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
 
 	float aspect = (xmax - xmin) / (ymax - ymin);
 	QImage output(input.width(), input.width() / aspect, input.format());
@@ -140,28 +97,27 @@ int main(int argc, char* argv[])
 
 			float tx = 0.0f;
 			float ty = 0.0f;
-			multiplyPixelMatrix(xmin + x * dx, ymin + y * dy, H, tx, ty);
+			Eigen::Vector2f t = arpl.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
 
-			if (tx > -1 && ty > -1
-				&& tx < input.width()
-				&& ty < input.height())
+			if (t.x() > -1 && t.y() > -1
+				&& t.x() < input.width()
+				&& t.y() < input.height())
 			{
 				//if (interpolate)
 				//{
-				//	QRgb rgb = bilinearInterpol(input, tx, ty, dx, dy);
+				//	QRgb rgb = bilinearInterpol(input, t.x(), t.y(), dx, dy);
 				//	output.setPixel(x, y, rgb);
 				//}
 				//else
 				{
-					output.setPixel(x, y, input.pixel(tx, ty));
+					output.setPixel(x, y, input.pixel(t.x(), t.y()));
 				}
 			}
 		}
 	}
 
 
-	//output.save(outputFileName.c_str());
-	output.save("G:/Projects/PerspectiveDistortionRemove/bin/Debug/_affine.png");
+	output.save(outputFileName.c_str());
 
 	return EXIT_SUCCESS;
 }
