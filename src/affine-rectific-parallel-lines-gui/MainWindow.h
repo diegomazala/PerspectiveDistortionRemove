@@ -3,7 +3,7 @@
 
 
 #include <QMainWindow>
-#include "PDR.h"
+#include "Arpl.h"
 
 class AboutDialog;
 
@@ -44,6 +44,7 @@ private:
 	QString currentFileName;
 	int currentLine;
 
+	Arpl arpl;
 
 	QImage inputImage;
 	QImage outputImage;

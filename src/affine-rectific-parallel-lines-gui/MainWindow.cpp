@@ -6,28 +6,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <iostream>
+#include "Interpolation.h"
 
 
-
-static QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy)
-{
-	float x0 = x - dx;
-	float x1 = x + dx;
-	float y0 = y - dy;
-	float y1 = y + dy;
-
-	QRgb rgb_xlt = (x0 > -1 && y0 > -1) ? img.pixel(x0, y0) : img.pixel(x, y);
-	QRgb rgb_xrt = (x1 < img.width() && y0 > -1) ? img.pixel(x1, y0) : img.pixel(x, y);
-
-	QRgb rgb_xlb = (x0 > -1 && y1 < img.height()) ? img.pixel(x0, y1) : img.pixel(x, y);
-	QRgb rgb_xrb = (x1 < img.width() && y1 < img.height()) ? img.pixel(x1, y1) : img.pixel(x, y);
-
-	int r = (0.25f * qRed(rgb_xlt)) + (0.25f * qRed(rgb_xrt)) + (0.25f * qRed(rgb_xlb)) + (0.25f * qRed(rgb_xrb));
-	int g = (0.25f * qGreen(rgb_xlt)) + (0.25f * qGreen(rgb_xrt)) + (0.25f * qGreen(rgb_xlb)) + (0.25f * qGreen(rgb_xrb));
-	int b = (0.25f * qBlue(rgb_xlt)) + (0.25f * qBlue(rgb_xrt)) + (0.25f * qBlue(rgb_xlb)) + (0.25f * qBlue(rgb_xrb));
-
-	return qRgb(r, g, b);
-}
 
 MainWindow::MainWindow(QWidget *parent) : 
 			QMainWindow(parent),
@@ -181,6 +162,56 @@ void MainWindow::onNewPoint(int line_index, int vertex_index, int x, int y)
 
 void MainWindow::onCalculateButtonPress()
 {
+	arpl.setLinePoint(0, 
+		ui->line0x0SpinBox->value(), ui->line0y0SpinBox->value(), 
+		ui->line0x1SpinBox->value(), ui->line0y1SpinBox->value());
+	
+	arpl.setLinePoint(1,
+		ui->line1x0SpinBox->value(), ui->line1y0SpinBox->value(),
+		ui->line1x1SpinBox->value(), ui->line1y1SpinBox->value());
+
+	arpl.setLinePoint(2,
+		ui->line2x0SpinBox->value(), ui->line2y0SpinBox->value(),
+		ui->line2x1SpinBox->value(), ui->line2y1SpinBox->value());
+
+	arpl.setLinePoint(3,
+		ui->line3x0SpinBox->value(), ui->line3y0SpinBox->value(),
+		ui->line3x1SpinBox->value(), ui->line3y1SpinBox->value());
+
+	arpl.computeHMatrix();
+
+	Eigen::Vector3f img(inputImage.width(), inputImage.height(), 1.0f);
+
+	float xmin, xmax, ymin, ymax;
+	arpl.computImageSize(0, 0, inputImage.width(), inputImage.height(), xmin, xmax, ymin, ymax);
+	
+	float aspect = (xmax - xmin) / (ymax - ymin);
+	outputImage = QImage(inputImage.width(), inputImage.width() / aspect, inputImage.format());
+	outputImage.fill(qRgb(0, 0, 0));
+
+	float dx = (xmax - xmin) / float(outputImage.width());
+	float dy = (ymax - ymin) / float(outputImage.height());
+
+	for (int x = 0; x < outputImage.width(); ++x)
+	{
+		for (int y = 0; y < outputImage.height(); ++y)
+		{
+			Eigen::Vector3f px(x, y, 1);
+
+			float tx = 0.0f;
+			float ty = 0.0f;
+			Eigen::Vector2f t = arpl.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
+
+			if (t.x() > -1 && t.y() > -1
+				&& t.x() < inputImage.width()
+				&& t.y() < inputImage.height())
+			{
+				QRgb rgb = bilinearInterpol(inputImage, t.x(), t.y(), dx, dy);
+				outputImage.setPixel(x, y, rgb);
+			}
+		}
+	}
+
 	ui->outputRadioButton->setChecked(true);
 	update();
 }
