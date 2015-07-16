@@ -3,7 +3,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <fstream>
-//#include <interpolation.h>
+#include "Interpolation.h"
 #include "Arpl.h"
 
 void readConfigFile(const char* config_file, Arpl& arpl, std::string& input_file_name, std::string& output_file_name, bool& interpolate)
@@ -103,12 +103,12 @@ int main(int argc, char* argv[])
 				&& t.x() < input.width()
 				&& t.y() < input.height())
 			{
-				//if (interpolate)
-				//{
-				//	QRgb rgb = bilinearInterpol(input, t.x(), t.y(), dx, dy);
-				//	output.setPixel(x, y, rgb);
-				//}
-				//else
+				if (interpolate)
+				{
+					QRgb rgb = bilinearInterpol(input, t.x(), t.y(), dx, dy);
+					output.setPixel(x, y, rgb);
+				}
+				else
 				{
 					output.setPixel(x, y, input.pixel(t.x(), t.y()));
 				}

@@ -25,7 +25,7 @@ qt5_wrap_ui( HEADER_UI_FILES ${FORM_FILES} )
 
 source_group ("Form Files" FILES ${FORM_FILES})
 source_group ("Form Header Files" FILES ${HEADER_UI_FILES})
-source_group ("PDR Source" FILES ${PDR_SOURCE_FILES})
+source_group ("Common Source" FILES ${COMMON_SOURCE_FILES})
 
 include_directories (${CMAKE_SOURCE_DIR})
 
@@ -35,7 +35,7 @@ add_executable(
   ${SOURCE_FILES}
   ${HEADER_FILES}
   ${HEADER_UI_FILES}
-  ${PDR_SOURCE_FILES}
+  ${COMMON_SOURCE_FILES}
 )
 
 target_link_libraries (	

@@ -1,0 +1,10 @@
+input		../../data/floor.jpg 
+output	../../data/floor_output_arpl.jpg 
+
+interpolation on
+
+lines_image_points
+200 278 127 215
+270 212 199 163
+200 278 270 212
+127 215 199 163
