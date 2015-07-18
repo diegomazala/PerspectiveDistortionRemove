@@ -206,7 +206,7 @@ void MainWindow::onCalculateButtonPress()
 				&& t.x() < inputImage.width()
 				&& t.y() < inputImage.height())
 			{
-				QRgb rgb = bilinearInterpol(inputImage, t.x(), t.y(), dx, dy);
+				QRgb rgb = bilinearInterpol(inputImage, t.x(), t.y(), dx / 2.0f, dy / 2.0f);
 				outputImage.setPixel(x, y, rgb);
 			}
 		}

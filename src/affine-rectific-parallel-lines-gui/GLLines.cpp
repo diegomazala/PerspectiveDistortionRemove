@@ -79,8 +79,8 @@ void GLLines::reset()
 {
 	vertices.clear();
 	vertices
-		<< QVector3D(-0.10f, -0.10f, 0.0f)
-		<< QVector3D(0.10f, 0.10f, 0.0f)
+		<< QVector3D(-1.0f, -1.0f, 0.0f)
+		<< QVector3D(-1.0f, -1.0f, 0.0f)
 		<< QVector3D(-1.0f, -1.0f, 0.0f)
 		<< QVector3D(-1.0f, -1.0f, 0.0f)
 		<< QVector3D(-1.0f, -1.0f, 0.0f)

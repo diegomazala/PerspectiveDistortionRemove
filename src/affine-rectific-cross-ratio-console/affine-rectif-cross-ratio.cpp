@@ -4,9 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include "Interpolation.h"
-#include "Arpl.h"
+#include "Arcr.h"
 
-void readConfigFile(const char* config_file, Arpl& arpl, std::string& input_file_name, std::string& output_file_name, bool& interpolate)
+void readConfigFile(const char* config_file, Arcr& arcr, std::string& input_file_name, std::string& output_file_name, bool& interpolate)
 {
 	std::ifstream config(config_file);
 	if (config.is_open())
@@ -36,11 +36,11 @@ void readConfigFile(const char* config_file, Arpl& arpl, std::string& input_file
 			}
 			else if (str_list[0] == "lines_image_points")
 			{
-				for (int i = 0; i < 4; ++i)
+				for (int i = 0; i < 2; ++i)
 				{
-					float x0, y0, x1, y1;
-					config >> x0 >> y0 >> x1 >> y1;
-					arpl.setLinePoint(i, x0, y0, x1, y1);
+					float x0, y0, x1, y1, x2, y2;
+					config >> x0 >> y0 >> x1 >> y1 >> x2 >> y2;
+					arcr.setLinePoint(i, x0, y0, x1, y1, x2, y2);
 				}
 			}
 		}
@@ -48,7 +48,7 @@ void readConfigFile(const char* config_file, Arpl& arpl, std::string& input_file
 	}
 }
 
-// Example usage:  $./affine-rectific-parallel-lines-console.exe ../../data/config-affine-rectific-parallel-lines.txt
+// Example usage:  $./affine-rectific-cross-ratio-console.exe ../../data/config-affine-rectific-cross-ratio.txt
 int main(int argc, char* argv[])
 {
 	if (argc < 2)
@@ -59,14 +59,14 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	Arpl arpl;
+	Arcr arcr;
 	std::string inputFileName = "input.png";
 	std::string outputFileName = "output.png";
 	bool interpolate = true;
 
-	readConfigFile(argv[1], arpl, inputFileName, outputFileName, interpolate);
+	readConfigFile(argv[1], arcr, inputFileName, outputFileName, interpolate);
 	
-	arpl.computeHMatrix();
+	arcr.computeHMatrix();
 
 	QImage input(inputFileName.c_str());
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 	float xmax = 0;
 	float ymin = 0;
 	float ymax = 0;
-	arpl.computImageSize(0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
+	arcr.computImageSize(0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
 
 	float aspect = (xmax - xmin) / (ymax - ymin);
 	QImage output(input.width(), input.width() / aspect, input.format());
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 
 			float tx = 0.0f;
 			float ty = 0.0f;
-			Eigen::Vector2f t = arpl.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
+			Eigen::Vector2f t = arcr.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
 
 			if (t.x() > -1 && t.y() > -1
 				&& t.x() < input.width()
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 			{
 				if (interpolate)
 				{
-					QRgb rgb = bilinearInterpol(input, t.x(), t.y(), dx / 2.0, dy / 2.0);
+					QRgb rgb = bilinearInterpol(input, t.x(), t.y(), dx, dy);
 					output.setPixel(x, y, rgb);
 				}
 				else
