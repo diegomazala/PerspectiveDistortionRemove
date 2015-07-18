@@ -7,6 +7,8 @@ set (COMMON_SOURCE_FILES
 						${COMMON_SOURCE_DIR}/PDR.cpp
 						${COMMON_SOURCE_DIR}/Arpl.h 
 						${COMMON_SOURCE_DIR}/Arpl.cpp
+						${COMMON_SOURCE_DIR}/Arcr.h 
+						${COMMON_SOURCE_DIR}/Arcr.cpp
 						${COMMON_SOURCE_DIR}/MetricRetification.h 
 						${COMMON_SOURCE_DIR}/MetricRetification.cpp
 						${COMMON_SOURCE_DIR}/Interpolation.h

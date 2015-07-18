@@ -76,19 +76,7 @@ void MainWindow::fileSaveAs()
 
 void MainWindow::aboutDialogShow()
 {
-	QString message
-		("<p>Perspective distortion remove algorithm using Qt and Opengl" \
-		"<p><p>" \
-		"<br>   Usage: <br>" \
-		"<br>   1. Select 4 points on the image. It can be input on left panel or keeping control key pressed and left click over the points.<br>" \
-		"<br>		a. With control key, you will draw lines.<br>" \
-		"<br>		b. With shift key, you will draw points.<br>" \
-		"<br>		c. After draw, you can switch between lines and points pressing keys 'L' or 'P'.<br>" \
-		"<br>   2. Input the 4 world points on the left panel. It must have the same order that you used for input image points. <br>" \
-		"<br>   3. Press calculate button <br>" \
-		"<p><p><p>" \
-		"<p>Developed by: Diego Mazala, June-2015" \
-		"<p>");
+	QString message("...");
 
 	QMessageBox::about(this, tr("Perspective Distortion Remove"), message);
 

@@ -3,7 +3,7 @@
 
 
 #include <QMainWindow>
-#include "PDR.h"
+#include "Arcr.h"
 
 class AboutDialog;
 
@@ -44,11 +44,11 @@ private:
 	QString currentFileName;
 	int currentLine;
 
+	Arcr arcr;
 
 	QImage inputImage;
 	QImage outputImage;
 };
 
-static QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy);
 
 #endif // _MAIN_WINDOW_H_
