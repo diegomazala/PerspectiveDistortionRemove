@@ -3,13 +3,14 @@
 
 
 #include <QMainWindow>
-#include "PDR.h"
+#include "GLImageWidget.h"
 
 class AboutDialog;
 
 namespace Ui 
 {
 	class MainWindow;
+	class GLImageWidget;
 }
 
 
@@ -21,6 +22,8 @@ public:
 	
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+
+	GLImageWidget* getGLWidget();
 
 public slots:
 	void fileOpen();
@@ -50,6 +53,5 @@ private:
 	QImage outputImage;
 };
 
-static QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy);
 
 #endif // _MAIN_WINDOW_H_

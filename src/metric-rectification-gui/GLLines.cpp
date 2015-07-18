@@ -3,21 +3,13 @@
 #include <iostream>
 
 
-GLLines::GLLines(QObject *parent)
+GLLines::GLLines(int line_count,QObject *parent)
 	: QObject(parent),
-	enabled(true)
+	enabled(true),
+	maxLines(line_count * 2)
 {
-	vertices
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f);
+	for (int i = 0; i < maxLines; ++i)
+		vertices.push_back(QVector3D(-1.0f, -1.0f, 0.0f));
 }
 
 
@@ -42,6 +34,7 @@ void GLLines::initialize()
 {
 	initializeOpenGLFunctions();
 	
+
 	program.reset(buildProgram());
 	program->release();
 
@@ -63,9 +56,7 @@ void GLLines::setVertexLine(int line_index, int vertex_index, QVector3D v)
 	{
 		vertices[line_index * 2 + 1] = v;	// line_end
 	}
-
-	
-
+		
 
 	updateVertexBuffer();
 
@@ -75,20 +66,32 @@ void GLLines::setVertexLine(int line_index, int vertex_index, QVector3D v)
 }
 
 
+
+void GLLines::setVertices(int vertex_index, QVector3D v)
+{
+	vertices[vertex_index] = v;	
+	updateVertexBuffer();
+}
+
+
+void GLLines::computeCanonicalVertices(int width, int height)
+{
+	for (int i = 0; i < maxLines; ++i)
+	{
+		QVector3D v = vertices[i];
+		vertices[i].setX(v.x() / float(width) * 2.0f - 1.0f);
+		vertices[i].setY(v.y() / float(height) * 2.0f - 1.0f);
+	}
+
+	updateVertexBuffer();
+}
+
+
 void GLLines::reset()
 {
 	vertices.clear();
-	vertices
-		<< QVector3D(-0.10f, -0.10f, 0.0f)
-		<< QVector3D(0.10f, 0.10f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f)
-		<< QVector3D(-1.0f, -1.0f, 0.0f);
+	for (int i = 0; i < maxLines; ++i)
+		vertices.push_back(QVector3D(-1.0f, -1.0f, 0.0f));
 	updateVertexBuffer();
 }
 
@@ -135,7 +138,7 @@ QOpenGLShaderProgram* GLLines::buildProgram() const
 	const char *fsrc =
 		"void main(void)\n"
 		"{\n"
-		"    gl_FragColor = vec4(1.0f);\n"
+		"    gl_FragColor = vec4(0.0f, 1.0f, 1.0f, 1.0f);\n"
 		"}\n";
 	fshader->compileSourceCode(fsrc);
 

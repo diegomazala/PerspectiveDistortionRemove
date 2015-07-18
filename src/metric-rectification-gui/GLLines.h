@@ -19,7 +19,7 @@ class GLLines : public QObject, protected QOpenGLFunctions
 	Q_OBJECT
 
 public:
-	GLLines(QObject *parent = 0);
+	GLLines(int line_count, QObject *parent = 0);
 	virtual ~GLLines();
 
 public slots:
@@ -30,6 +30,8 @@ public slots:
 	void reset();
 
 	void setVertexLine(int line_index, int vertex_index, QVector3D v);
+	void setVertices(int vertex_index, QVector3D v);
+	void computeCanonicalVertices(int width, int height);
 	
 protected:	// methods
 
@@ -45,6 +47,7 @@ protected: // attributes
 	QVector<QVector3D> vertices;
 	bool drawVertices;
 	bool enabled;
+	const int maxLines;
 };
 
 

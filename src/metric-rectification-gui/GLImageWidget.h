@@ -28,6 +28,8 @@ public:
 	QSize minimumSizeHint() const Q_DECL_OVERRIDE{ return QSize(50, 50); };
 	QSize sizeHint() const Q_DECL_OVERRIDE{ return QSize(1280, 720); };
 	
+	GLLines& glLines() { return lines; }
+
 public slots:
 	virtual void cleanup();
 	void setImage(const QImage& image);

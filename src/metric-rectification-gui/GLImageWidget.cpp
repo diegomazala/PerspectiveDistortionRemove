@@ -3,14 +3,15 @@
 #include <iostream>
 #include <QApplication>
 #include <QMouseEvent>
+#include <QFile>
 #include <QTimer>
 
 GLImageWidget::GLImageWidget(QWidget *parent)
 	: QOpenGLWidget(parent),
 	renderTexture(this),
-	lines(this),
+	lines(10, this),
 	currentLineIndex(0),
-	maxLines(5)
+	maxLines(10)
 {
 	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 	setFocus();
@@ -84,6 +85,16 @@ void GLImageWidget::initializeGL()
 
 	renderTexture.initialize();
 	lines.initialize();
+
+	// look for image file
+	std::string img_file("data/floor.jpg");
+	QFile file;
+	for (int i = 0; i < 5; ++i)
+		if (!file.exists(img_file.c_str()))
+			img_file.insert(0, "../");
+	setImage(img_file.c_str());
+
+	glLineWidth(5);
 }
 
 
@@ -105,6 +116,7 @@ void GLImageWidget::resizeGL(int w, int h)
 
 void GLImageWidget::mousePressEvent(QMouseEvent *event)
 {
+#if 0
 	if (event->button() == Qt::MouseButton::MiddleButton)
 		clickBegin = event->pos();
 
@@ -123,11 +135,13 @@ void GLImageWidget::mousePressEvent(QMouseEvent *event)
 
 		lines.setVertexLine(currentLineIndex, 0, QVector3D(x, y, z));
 	}
+#endif
 }
 
 
 void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+#if 0
 	if (event->button() == Qt::MouseButton::MiddleButton)
 	{
 		clickEnd = event->pos();
@@ -154,7 +168,7 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 			lines.setVertexLine(currentLineIndex, 1, QVector3D(x, y, z));
 		}
 	}
-	
+#endif
 	
 	this->update();
 }
@@ -162,6 +176,7 @@ void GLImageWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void GLImageWidget::mouseMoveEvent(QMouseEvent *event)
 {
+#if 0
 	int ximg = float(event->x()) / float(width()) * float(renderTexture.width());
 	int yimg = float(event->y()) / float(height()) * float(renderTexture.height());
 	emit mouseMove(ximg, yimg);
@@ -174,7 +189,7 @@ void GLImageWidget::mouseMoveEvent(QMouseEvent *event)
 	if (currentLineIndex > -1 && currentLineIndex < maxLines
 		&& event->buttons() & Qt::LeftButton)	// only if left button is pressed
 		lines.setVertexLine(currentLineIndex, 1, QVector3D(x, y, z));
-
+#endif
 	update();
 }
 

@@ -8,27 +8,6 @@
 #include <iostream>
 
 
-
-static QRgb bilinearInterpol(const QImage& img, float x, float y, float dx, float dy)
-{
-	float x0 = x - dx;
-	float x1 = x + dx;
-	float y0 = y - dy;
-	float y1 = y + dy;
-
-	QRgb rgb_xlt = (x0 > -1 && y0 > -1) ? img.pixel(x0, y0) : img.pixel(x, y);
-	QRgb rgb_xrt = (x1 < img.width() && y0 > -1) ? img.pixel(x1, y0) : img.pixel(x, y);
-
-	QRgb rgb_xlb = (x0 > -1 && y1 < img.height()) ? img.pixel(x0, y1) : img.pixel(x, y);
-	QRgb rgb_xrb = (x1 < img.width() && y1 < img.height()) ? img.pixel(x1, y1) : img.pixel(x, y);
-
-	int r = (0.25f * qRed(rgb_xlt)) + (0.25f * qRed(rgb_xrt)) + (0.25f * qRed(rgb_xlb)) + (0.25f * qRed(rgb_xrb));
-	int g = (0.25f * qGreen(rgb_xlt)) + (0.25f * qGreen(rgb_xrt)) + (0.25f * qGreen(rgb_xlb)) + (0.25f * qGreen(rgb_xrb));
-	int b = (0.25f * qBlue(rgb_xlt)) + (0.25f * qBlue(rgb_xrt)) + (0.25f * qBlue(rgb_xlb)) + (0.25f * qBlue(rgb_xrb));
-
-	return qRgb(r, g, b);
-}
-
 MainWindow::MainWindow(QWidget *parent) : 
 			QMainWindow(parent),
 			ui(new Ui::MainWindow),
@@ -49,6 +28,10 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+GLImageWidget* MainWindow::getGLWidget()
+{
+	return ui->glImageWidget;
+}
 
 void MainWindow::fileOpen()
 {
