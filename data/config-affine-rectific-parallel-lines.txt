@@ -1,5 +1,5 @@
 input		../../data/floor.jpg 
-output	../../data/floor_output_arpl.jpg 
+output	../../data/_output.jpg 
 
 interpolation on
 
