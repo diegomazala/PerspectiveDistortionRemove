@@ -52,22 +52,15 @@ void Arcr::computeHMatrix()
 	float wc = 1.0f + ratio;
 
 	
-#if 1
 	b[0] = ia;
 	b[1] = ib;
 	b[2] = ic;
-#else
-	b[0] = wa;
-	b[1] = wb;
-	b[2] = wc;
-#endif
 
 	std::cout << "b:" << std::endl;
 	for (int i = 0; i < b.size(); ++i)
 		std::cout << std::fixed << b[i] << '\t';
 	std::cout << std::endl << std::endl;
 
-#if 1
 	A(0, 0) = wa;
 	A(0, 1) = 1.0f;
 	A(0, 2) = -wa * ia;
@@ -79,19 +72,6 @@ void Arcr::computeHMatrix()
 	A(2, 0) = wc;
 	A(2, 1) = 1.0f;
 	A(2, 2) = -wc * ic;
-#else
-	A(0, 0) = ia;
-	A(0, 1) = 1.0f;
-	A(0, 2) = -ia * wa;
-
-	A(1, 0) = ib;
-	A(1, 1) = 1.0f;
-	A(1, 2) = -ib * wb;
-
-	A(2, 0) = ic;
-	A(2, 1) = 1.0f;
-	A(2, 2) = -ic * wc;
-#endif
 
 	std::cout << "Matrix A: \n" << A << std::endl << std::endl;
 
@@ -129,22 +109,15 @@ void Arcr::computeHMatrix()
 	std::cout << "\na,b,c: " << ia << ", " << ib << ", " << ic << std::endl << std::endl;
 
 
-#if 1
 	b[0] = ia;
 	b[1] = ib;
 	b[2] = ic;
-#else
-	b[0] = wa;
-	b[1] = wb;
-	b[2] = wc;
-#endif
 
 	std::cout << "b:" << std::endl;
 	for (int i = 0; i < b.size(); ++i)
 		std::cout << std::fixed << b[i] << '\t';
 	std::cout << std::endl << std::endl;
 
-#if 1
 	A(0, 0) = wa;
 	A(0, 1) = 1.0f;
 	A(0, 2) = -wa * ia;
@@ -156,19 +129,6 @@ void Arcr::computeHMatrix()
 	A(2, 0) = wc;
 	A(2, 1) = 1.0f;
 	A(2, 2) = -wc * ic;
-#else
-	A(0, 0) = ia;
-	A(0, 1) = 1.0f;
-	A(0, 2) = -ia * wa;
-
-	A(1, 0) = ib;
-	A(1, 1) = 1.0f;
-	A(1, 2) = -ib * wb;
-
-	A(2, 0) = ic;
-	A(2, 1) = 1.0f;
-	A(2, 2) = -ic * wc;
-#endif
 
 
 	std::cout << "Matrix A: \n" << A << std::endl << std::endl;
