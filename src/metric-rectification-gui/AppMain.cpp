@@ -97,9 +97,9 @@ int main(int argc, char* argv[])
 	//lines[9] = Eigen::Vector3f(-0.00330775, -3.60706e-05, 0.999995);
 
 
-
-	Eigen::MatrixXf A(6, 6);
+	Eigen::MatrixXf A(5, 5);
 	Eigen::Vector3f l, m;
+	Eigen::VectorXf b(5);
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -112,15 +112,38 @@ int main(int argc, char* argv[])
 		A(i, 3) = (l[0] * m[2] + l[2] * m[0]) / 2.0f;
 		A(i, 4) = (l[1] * m[2] + l[2] * m[1]) / 2.0f;
 		A(i, 5) = l[2] * m[2];
+
+		b[i] = -l[2] * m[2];
 	}
-	A.row(5) << 0, 0, 0, 0, 0, 0;
 
-	std::cout << A << std::endl << std::endl;
+	std::cout << "A: \n" << A << std::endl << std::endl;
+	std::cout << "b: \n" << b << std::endl << std::endl;
 
-	Eigen::MatrixXf x = A.fullPivLu().kernel();
-	std::cout << "x: ";
-	for (int i = 0; i < x.size(); ++i)
-		std::cout << std::fixed << x.data()[i] << '\t';
-	//std::cout << std::endl << std::endl;
+	Eigen::MatrixXf x = A.colPivHouseholderQr().solve(b);
+	std::cout << std::fixed << "x: \n" << x << std::endl << std::endl;
+
+
+	Eigen::MatrixXf conic(3, 3);
+	conic(0, 0) = x(0);
+	conic(0, 1) = x(1) / 2.0f;
+	conic(0, 2) = x(3) / 2.0f;
+	conic(1, 0) = x(1) / 2.0f;
+	conic(1, 1) = x(2);
+	conic(1, 2) = x(4) / 2.0f;
+	conic(2, 0) = x(3) / 2.0f;
+	conic(2, 1) = x(4) / 2.0f;
+	conic(2, 2) = 1.0f;
+	std::cout << "Conic : " << std::endl << conic << std::endl << std::endl;
+
+	Eigen::JacobiSVD<Eigen::MatrixXf> svd(conic, Eigen::ComputeFullU);
+	Eigen::MatrixXf H = svd.matrixU();
+	std::cout << "H matrix: " << std::endl 
+		<< H << std::endl << std::endl 
+		<< "Singular values: " << svd.singularValues()
+		<< std::endl << std::endl;
+
+	std::cout << "Rectification transformation: " << std::endl << H.inverse() << std::endl << std::endl;
+
+
 	return EXIT_SUCCESS;
 }
