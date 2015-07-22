@@ -80,7 +80,7 @@ void GLLines::computeCanonicalVertices(int width, int height)
 	{
 		QVector3D v = vertices[i];
 		vertices[i].setX(v.x() / float(width) * 2.0f - 1.0f);
-		vertices[i].setY(v.y() / float(height) * 2.0f - 1.0f);
+		vertices[i].setY(v.y() / (float(height) * 2.0f - 1.0f) * (-1.0f)); 	// inverting y coordinate
 	}
 
 	updateVertexBuffer();

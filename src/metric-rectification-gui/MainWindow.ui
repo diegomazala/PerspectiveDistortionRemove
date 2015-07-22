@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>600</height>
+    <width>1144</width>
+    <height>675</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Perspective Distortion Remove</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_7">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="maximumSize">
        <size>
-        <width>321</width>
+        <width>291</width>
         <height>16777215</height>
        </size>
       </property>
@@ -121,11 +121,11 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
              <widget class="QRadioButton" name="line0RadioButton">
               <property name="text">
-               <string>Line 0</string>
+               <string>Pair Line 0</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -133,308 +133,608 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line0x0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_16">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0x0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0y0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0x1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0y1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line0y0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line0x1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line0y1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_17">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0x2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0y2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0x3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine0y3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
              <widget class="QRadioButton" name="line1RadioButton">
               <property name="text">
-               <string>Line 1</string>
+               <string>Pair Line 1</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line1x0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_18">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1x0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1y0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1x1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1y1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line1y0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line1x1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line1y1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_19">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1x2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1y2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1x3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine1y3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_14">
             <item>
              <widget class="QRadioButton" name="line2RadioButton">
               <property name="text">
-               <string>Line 2</string>
+               <string>Pair Line 2</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line2x0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_29">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2x0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2y0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2x1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2y1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line2y0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line2x1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line2y1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_30">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2x2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2y2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2x3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine2y3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <layout class="QVBoxLayout" name="verticalLayout_15">
             <item>
              <widget class="QRadioButton" name="line3RadioButton">
               <property name="text">
-               <string>Line 3</string>
+               <string>Pair Line 3</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line3x0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_31">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3x0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3y0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3x1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3y1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line3y0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line3x1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line3y1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_32">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3x2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3y2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3x3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine3y3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <layout class="QVBoxLayout" name="verticalLayout_5">
             <item>
              <widget class="QRadioButton" name="line4RadioButton">
               <property name="text">
-               <string>Line 4</string>
+               <string>Pair Line 4</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line4x0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4x0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4y0SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4x1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4y1SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="line4y0SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line4x1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="line4y1SpinBox">
-              <property name="frame">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4x2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4y2SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4x3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="pairLine4y3SpinBox">
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>99999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -442,37 +742,41 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="calculatePushButton">
-         <property name="text">
-          <string>Calculate</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="imageGroupBox">
-         <property name="title">
-          <string>Image</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QRadioButton" name="inputRadioButton">
-            <property name="text">
-             <string>Input</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="outputRadioButton">
-            <property name="text">
-             <string>Output</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QPushButton" name="calculatePushButton">
+           <property name="text">
+            <string>Calculate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="imageGroupBox">
+           <property name="title">
+            <string>Image</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QRadioButton" name="inputRadioButton">
+              <property name="text">
+               <string>Input</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="outputRadioButton">
+              <property name="text">
+               <string>Output</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -487,7 +791,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1009</width>
+     <width>1144</width>
      <height>21</height>
     </rect>
    </property>

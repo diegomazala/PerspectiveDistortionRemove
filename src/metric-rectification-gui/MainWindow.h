@@ -4,6 +4,7 @@
 
 #include <QMainWindow>
 #include "GLImageWidget.h"
+#include "MetricRectification.h"
 
 class AboutDialog;
 
@@ -48,6 +49,7 @@ private:
 	QString currentFileName;
 	int currentLine;
 
+	MetricRectification rectific;
 
 	QImage inputImage;
 	QImage outputImage;

@@ -1,9 +1,7 @@
-#include <QApplication>
-#include <QFile>
-#include "MainWindow.h"
-#include "GLLines.h"
 #include <Eigen/Dense>
 #include <iostream>
+#include <vector>
+#include <QImage>
 
 
 void computImageSize(Eigen::MatrixXf h, float in_x, float in_y, float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y)
@@ -76,57 +74,18 @@ Eigen::Vector3f lineNormalized(Eigen::Vector3f p0, Eigen::Vector3f p1)
 	return p0.cross(p1).normalized();
 }
 
+
+// Example usage:  $./metric-rectification-console.exe 
 int main(int argc, char* argv[])
 {
-#if 1
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
+	if (argc < 1)
+	{
+		std::cerr << "Error: Missing parameters.\n"
+			<< "Usage: <app.exe> <input_image>"
+			<< std::endl;
+		return EXIT_FAILURE;
+	}
 
-
-	// look for image file
-	//std::string img_file("data/floor.jpg");
-	//QFile file;
-	//for (int i = 0; i < 5; ++i)
-	//	if (!file.exists(img_file.c_str()))
-	//		img_file.insert(0, "../");
-	//w.getGLWidget()->setImage(img_file.c_str());
-
-	
-
-	GLLines* gllines = &w.getGLWidget()->glLines();
-
-	//gllines->setVertexLine(0, 0, QVector3D(68, 164, 1.0f));
-	//gllines->setVertexLine(0, 1, QVector3D(142, 123, 1.0f));
-	//gllines->setVertexLine(1, 0, QVector3D(68, 174, 1.0f));
-	//gllines->setVertexLine(1, 1, QVector3D(142, 133, 1.0f));
-
-	//gllines->setVertexLine(0, 0, QVector3D(52.3467f, 125.102f, 1.0f));
-	//gllines->setVertexLine(0, 1, QVector3D(340.253f, 130.147f, 1.0f));
-	//gllines->setVertexLine(1, 0, QVector3D(193.28f, 126.111f, 1.0f));
-	//gllines->setVertexLine(1, 1, QVector3D(225.493f, 360.173f, 1.0f));
-	//gllines->setVertexLine(2, 0, QVector3D(42.28f, 263.32f, 1.0f));
-	//gllines->setVertexLine(2, 1, QVector3D(296.967f, 397.502f, 1.0f));
-	//gllines->setVertexLine(3, 0, QVector3D(212.407f, 269.373f, 1.0f);)u
-	//gllines->setVertexLine(3, 1, QVector3D(34.2267f, 391.449f, 1.0f));
-	//gllines->setVertexLine(4, 0, QVector3D(294.953f, 318.809f, 1.0f));
-	//gllines->setVertexLine(4, 1, QVector3D(456.02f, 322.844f, 1.0f));
-	//gllines->setVertexLine(5, 0, QVector3D(492.26f, 208.84f, 1.0f));
-	//gllines->setVertexLine(5, 1, QVector3D(429.847f, 400.529f, 1.0f));
-	//gllines->setVertexLine(6, 0, QVector3D(299.987f, 31.2756f, 1.0f));
-	//gllines->setVertexLine(6, 1, QVector3D(555.68f, 273.409f, 1.0f));
-	//gllines->setVertexLine(7, 0, QVector3D(545.613f, 39.3467f, 1.0f));
-	//gllines->setVertexLine(7, 1, QVector3D(236.567f, 250.204f, 1.0f));
-	//gllines->setVertexLine(8, 0, QVector3D(95.6333f, 264.329f, 1.0f));
-	//gllines->setVertexLine(8, 1, QVector3D(501.32f, 273.409f, 1.0f));
-	//gllines->setVertexLine(9, 0, QVector3D(302.00f, 29.2578f, 1.0f));
-	//gllines->setVertexLine(9, 1, QVector3D(297.973f, 398.511f, 1.0f));
-	gllines->computeCanonicalVertices(w.getGLWidget()->width(), w.getGLWidget()->height());
-	gllines->onEnable(true);
-
-	return a.exec();
-
-#else
 	std::vector<Eigen::Vector3f> vertices;
 	vertices.push_back(Eigen::Vector3f(52.3467f, 125.102f, 1.0f));
 	vertices.push_back(Eigen::Vector3f(340.253f, 130.147f, 1.0f));
@@ -223,8 +182,17 @@ int main(int argc, char* argv[])
 
 
 
+	std::string inputFileName = "../../data/floor.jpg";
+	std::string outputFileName = "output.png";
+	if (argc > 1)
+		inputFileName = argv[1];
+	QImage input;
+	if (!input.load(inputFileName.c_str()))
+	{
+		std::cout << "ERROR: Could not load input image file. Abort" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-	QImage input("../../data/floor.jpg");
 	Eigen::Vector3f img(input.width(), input.height(), 1.0f);
 
 	float xmin = 0;
@@ -273,8 +241,8 @@ int main(int argc, char* argv[])
 	}
 
 
-	output.save("../../data/_output_5_floor.jpg");
-	
+	if (output.save(outputFileName.c_str()))
+		std::cout << "\nSaved ouput image file: " << outputFileName << std::endl;
+
 	return EXIT_SUCCESS;
-#endif
 }

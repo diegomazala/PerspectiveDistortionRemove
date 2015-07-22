@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
 			ui(new Ui::MainWindow),
 			currentFileName(QString()),
 			currentLine(0),
+			rectific(5),
 			inputImage(1,1,QImage::Format_RGB888),
 			outputImage(1, 1, QImage::Format_RGB888)
 {
@@ -20,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	inputImage.fill(Qt::GlobalColor::black);
 	outputImage.fill(Qt::GlobalColor::black);
-
 }
 
 MainWindow::~MainWindow()
@@ -35,7 +35,14 @@ GLImageWidget* MainWindow::getGLWidget()
 
 void MainWindow::fileOpen()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "../../data", tr("Images (*.png *.bmp *.jpg *.tif)"));
+	// look for shader dir 
+	QDir dir;
+	std::string open_dir("data");
+	for (int i = 0; i < 5; ++i)
+		if (!dir.exists(open_dir.c_str()))
+			open_dir.insert(0, "../");
+
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), open_dir.c_str(), tr("Images (*.png *.bmp *.jpg *.tif)"));
 
 	if (!fileName.isEmpty())
 	{
@@ -79,20 +86,10 @@ void MainWindow::fileSaveAs()
 void MainWindow::aboutDialogShow()
 {
 	QString message
-		("<p>Perspective distortion remove algorithm using Qt and Opengl" \
-		"<p><p>" \
-		"<br>   Usage: <br>" \
-		"<br>   1. Select 4 points on the image. It can be input on left panel or keeping control key pressed and left click over the points.<br>" \
-		"<br>		a. With control key, you will draw lines.<br>" \
-		"<br>		b. With shift key, you will draw points.<br>" \
-		"<br>		c. After draw, you can switch between lines and points pressing keys 'L' or 'P'.<br>" \
-		"<br>   2. Input the 4 world points on the left panel. It must have the same order that you used for input image points. <br>" \
-		"<br>   3. Press calculate button <br>" \
-		"<p><p><p>" \
-		"<p>Developed by: Diego Mazala, June-2015" \
+		("<p>" \
 		"<p>");
 
-	QMessageBox::about(this, tr("Perspective Distortion Remove"), message);
+	QMessageBox::about(this, tr("..."), message);
 
 }
 
@@ -104,66 +101,46 @@ void MainWindow::onGLMouseMove(int x, int y)
 }
 
 
-void MainWindow::onNewPoint(int line_index, int vertex_index, int x, int y)
-{
-	switch (line_index)
-	{
-	case 0:
-		if (vertex_index == 0)
-		{
-			ui->line0x0SpinBox->setValue(x);
-			ui->line0y0SpinBox->setValue(y);
-		}
-		else
-		{
-			ui->line0x1SpinBox->setValue(x);
-			ui->line0y1SpinBox->setValue(y);
-		}
-		break;
-	case 1:
-		if (vertex_index == 0)
-		{
-			ui->line1x0SpinBox->setValue(x);
-			ui->line1y0SpinBox->setValue(y);
-		}
-		else
-		{
-			ui->line1x1SpinBox->setValue(x);
-			ui->line1y1SpinBox->setValue(y);
-		}
-		break;
-	case 2:
-		if (vertex_index == 0)
-		{
-			ui->line2x0SpinBox->setValue(x);
-			ui->line2y0SpinBox->setValue(y);
-		}
-		else
-		{
-			ui->line2x1SpinBox->setValue(x);
-			ui->line2y1SpinBox->setValue(y);
-		}
-		break;
-	case 3:
-		if (vertex_index == 0)
-		{
-			ui->line3x0SpinBox->setValue(x);
-			ui->line3y0SpinBox->setValue(y);
-		}
-		else
-		{
-			ui->line3x1SpinBox->setValue(x);
-			ui->line3y1SpinBox->setValue(y);
-		}
-		break;
-	default:
-		break;
-	}
-}
-
 
 void MainWindow::onCalculateButtonPress()
 {
+	rectific.solve();
+
+	Eigen::Vector3f img(inputImage.width(), inputImage.height(), 1.0f);
+
+	float xmin, xmax, ymin, ymax;
+	rectific.computImageSize(0, 0, inputImage.width(), inputImage.height(), xmin, xmax, ymin, ymax);
+
+	float aspect = (xmax - xmin) / (ymax - ymin);
+	outputImage = QImage(inputImage.width(), inputImage.width() / aspect, inputImage.format());
+	outputImage.fill(qRgb(0, 0, 0));
+
+
+	float dx = (xmax - xmin) / float(outputImage.width());
+	float dy = (ymax - ymin) / float(outputImage.height());
+
+	for (int x = 0; x < outputImage.width(); ++x)
+	{
+		for (int y = 0; y < outputImage.height(); ++y)
+		{
+			Eigen::Vector3f px(x, y, 1);
+
+			float tx = 0.0f;
+			float ty = 0.0f;
+			//Eigen::Vector2f t = rectific.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
+			Eigen::Vector2f t = rectific.multiplyPointMatrix(xmin + x * dx, ymin + y * dy);
+
+			if (t.x() > -1 && t.y() > -1
+				&& t.x() < inputImage.width()
+				&& t.y() < inputImage.height())
+			{
+				//QRgb rgb = bilinearInterpol(inputImage, t.x(), t.y(), dx / 2.0f, dy / 2.0f);
+				//outputImage.setPixel(x, y, rgb);
+				outputImage.setPixel(x, y, inputImage.pixel(t.x(), t.y()));
+			}
+		}
+	}
+
 	ui->outputRadioButton->setChecked(true);
 	update();
 }
@@ -198,7 +175,7 @@ void MainWindow::onLine1RadioButtonToggled(bool toggle)
 {
 	if (toggle)
 	{
-		currentLine = 1;
+		currentLine = 2;
 		ui->glImageWidget->setCurrentLine(currentLine);
 	}
 }
@@ -207,7 +184,7 @@ void MainWindow::onLine2RadioButtonToggled(bool toggle)
 {
 	if (toggle)
 	{
-		currentLine = 2;
+		currentLine = 4;
 		ui->glImageWidget->setCurrentLine(currentLine);
 	}
 }
@@ -216,7 +193,7 @@ void MainWindow::onLine3RadioButtonToggled(bool toggle)
 {
 	if (toggle)
 	{
-		currentLine = 3;
+		currentLine = 6;
 		ui->glImageWidget->setCurrentLine(currentLine);
 	}
 }
@@ -225,7 +202,146 @@ void MainWindow::onLine4RadioButtonToggled(bool toggle)
 {
 	if (toggle)
 	{
-		currentLine = 4;
+		currentLine = 8;
 		ui->glImageWidget->setCurrentLine(currentLine);
+	}
+}
+
+
+void MainWindow::onNewPoint(int line_index, int vertex_index, int x, int y)
+{
+	rectific.setVertexLine(line_index, vertex_index, Eigen::Vector3f(x, y, 1));
+
+	if (line_index % 2)
+		vertex_index = 2 + vertex_index;
+
+	line_index = line_index / 2;
+
+	switch (line_index)
+	{
+	case 0:
+		switch (vertex_index)
+		{
+		case 0:
+			ui->pairLine0x0SpinBox->setValue(x);
+			ui->pairLine0y0SpinBox->setValue(y);
+			break;
+		case 1:
+			ui->pairLine0x1SpinBox->setValue(x);
+			ui->pairLine0y1SpinBox->setValue(y);
+		case 2:
+			ui->pairLine0x2SpinBox->setValue(x);
+			ui->pairLine0y2SpinBox->setValue(y);
+		case 3:
+			ui->pairLine0x3SpinBox->setValue(x);
+			ui->pairLine0y3SpinBox->setValue(y);
+		default:
+			break;
+		}
+		break;
+	case 1:
+		switch (vertex_index)
+		{
+		case 0:
+			ui->pairLine1x0SpinBox->setValue(x);
+			ui->pairLine1y0SpinBox->setValue(y);
+			break;
+		case 1:
+			ui->pairLine1x1SpinBox->setValue(x);
+			ui->pairLine1y1SpinBox->setValue(y);
+		case 2:
+			ui->pairLine1x2SpinBox->setValue(x);
+			ui->pairLine1y2SpinBox->setValue(y);
+		case 3:
+			ui->pairLine1x3SpinBox->setValue(x);
+			ui->pairLine1y3SpinBox->setValue(y);
+		default:
+			break;
+		}
+		break;
+	case 2:
+		switch (vertex_index)
+		{
+		case 0:
+			ui->pairLine2x0SpinBox->setValue(x);
+			ui->pairLine2y0SpinBox->setValue(y);
+			break;
+		case 1:
+			ui->pairLine2x1SpinBox->setValue(x);
+			ui->pairLine2y1SpinBox->setValue(y);
+		case 2:
+			ui->pairLine2x2SpinBox->setValue(x);
+			ui->pairLine2y2SpinBox->setValue(y);
+		case 3:
+			ui->pairLine2x3SpinBox->setValue(x);
+			ui->pairLine2y3SpinBox->setValue(y);
+		default:
+			break;
+		}
+		break;
+	case 3:
+		switch (vertex_index)
+		{
+		case 0:
+			ui->pairLine3x0SpinBox->setValue(x);
+			ui->pairLine3y0SpinBox->setValue(y);
+			break;
+		case 1:
+			ui->pairLine3x1SpinBox->setValue(x);
+			ui->pairLine3y1SpinBox->setValue(y);
+		case 2:
+			ui->pairLine3x2SpinBox->setValue(x);
+			ui->pairLine3y2SpinBox->setValue(y);
+		case 3:
+			ui->pairLine3x3SpinBox->setValue(x);
+			ui->pairLine3y3SpinBox->setValue(y);
+		default:
+			break;
+		}
+		break;
+
+	case 4:
+		switch (vertex_index)
+		{
+		case 0:
+			ui->pairLine4x0SpinBox->setValue(x);
+			ui->pairLine4y0SpinBox->setValue(y);
+			break;
+		case 1:
+			ui->pairLine4x1SpinBox->setValue(x);
+			ui->pairLine4y1SpinBox->setValue(y);
+		case 2:
+			ui->pairLine4x2SpinBox->setValue(x);
+			ui->pairLine4y2SpinBox->setValue(y);
+		case 3:
+			ui->pairLine4x3SpinBox->setValue(x);
+			ui->pairLine4y3SpinBox->setValue(y);
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
+	if (line_index != currentLine)	// update ui toggle
+	{
+		switch (line_index)
+		{
+		case 0:
+			ui->line0RadioButton->setChecked(true);
+			break;
+		case 1:
+			ui->line1RadioButton->setChecked(true);
+			break;
+		case 2:
+			ui->line2RadioButton->setChecked(true);
+			break;
+		case 3:
+			ui->line3RadioButton->setChecked(true);
+			break;
+		default:
+			break;
+		}
 	}
 }

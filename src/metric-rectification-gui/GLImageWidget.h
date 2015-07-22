@@ -58,9 +58,8 @@ protected : // attributes
 	
 	GLRenderTexture renderTexture;
 	GLLines	lines;
-	QPoint clickBegin;
-	QPoint clickEnd;
 	int currentLineIndex;
+	int currentVertexIndex;
 	const int maxLines;
 };
 
