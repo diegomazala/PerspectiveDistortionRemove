@@ -220,14 +220,15 @@ int main(int argc, char* argv[])
 
 
 
-	QImage input("../../data/floor.jpg");
+
+	QImage input("floor-persp.jpg");
 	Eigen::Vector3f img(input.width(), input.height(), 1.0f);
 
 	float xmin = 0;
 	float xmax = 0;
 	float ymin = 0;
 	float ymax = 0;
-	computImageSize(H, 0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
+	computImageSize(H.inverse(), 0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
 
 
 	float aspect = (xmax - xmin) / (ymax - ymin);
@@ -249,7 +250,7 @@ int main(int argc, char* argv[])
 
 			float tx = 0.0f;
 			float ty = 0.0f;
-			Eigen::Vector2f t = multiplyPointMatrix(H.inverse(), xmin + x * dx, ymin + y * dy);
+			Eigen::Vector2f t = multiplyPointMatrix(H, xmin + x * dx, ymin + y * dy);
 
 			if (t.x() > -1 && t.y() > -1
 				&& t.x() < input.width()
@@ -269,7 +270,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	output.save("../../data/_output_5_floor.jpg");
+	output.save("output_5_floor.jpg");
 	
 	return EXIT_SUCCESS;
 #endif

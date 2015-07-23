@@ -41,33 +41,59 @@ Eigen::Vector3d MetricRectification::normalizeLine(Eigen::Vector3d p0, Eigen::Ve
 
 void MetricRectification::solve()
 {
-	std::vector<Eigen::Vector3d> vertices;
-	vertices.push_back(Eigen::Vector3d(52.3467, 125.102, 1.0));
-	vertices.push_back(Eigen::Vector3d(340.253, 130.147, 1.0));
-	vertices.push_back(Eigen::Vector3d(193.28, 126.111, 1.0));
-	vertices.push_back(Eigen::Vector3d(225.493, 360.173, 1.0));
+	//std::vector<Eigen::Vector3d> vertices;
+	//vertices.push_back(Eigen::Vector3d(52.3467, 125.102, 1.0));
+	//vertices.push_back(Eigen::Vector3d(340.253, 130.147, 1.0));
+	//vertices.push_back(Eigen::Vector3d(193.28, 126.111, 1.0));
+	//vertices.push_back(Eigen::Vector3d(225.493, 360.173, 1.0));
 
-	vertices.push_back(Eigen::Vector3d(42.28, 263.32, 1.0));
-	vertices.push_back(Eigen::Vector3d(296.967, 397.502, 1.0));
-	vertices.push_back(Eigen::Vector3d(212.407, 269.373, 1.0));
-	vertices.push_back(Eigen::Vector3d(34.2267, 391.449, 1.0));
-	
-	vertices.push_back(Eigen::Vector3d(294.953, 318.809, 1.0));
-	vertices.push_back(Eigen::Vector3d(456.02, 322.844, 1.0));
-	vertices.push_back(Eigen::Vector3d(492.26, 208.84, 1.0));
-	vertices.push_back(Eigen::Vector3d(429.847, 400.529, 1.0));
+	//vertices.push_back(Eigen::Vector3d(42.28, 263.32, 1.0));
+	//vertices.push_back(Eigen::Vector3d(296.967, 397.502, 1.0));
+	//vertices.push_back(Eigen::Vector3d(212.407, 269.373, 1.0));
+	//vertices.push_back(Eigen::Vector3d(34.2267, 391.449, 1.0));
+	//
+	//vertices.push_back(Eigen::Vector3d(294.953, 318.809, 1.0));
+	//vertices.push_back(Eigen::Vector3d(456.02, 322.844, 1.0));
+	//vertices.push_back(Eigen::Vector3d(492.26, 208.84, 1.0));
+	//vertices.push_back(Eigen::Vector3d(429.847, 400.529, 1.0));
 
-	vertices.push_back(Eigen::Vector3d(299.987, 31.2756, 1.0));
-	vertices.push_back(Eigen::Vector3d(555.68, 273.409, 1.0));
-	vertices.push_back(Eigen::Vector3d(545.613, 39.3467, 1.0));
-	vertices.push_back(Eigen::Vector3d(236.567, 250.204, 1.0));
-	
-	vertices.push_back(Eigen::Vector3d(95.6333, 264.329, 1.0));
-	vertices.push_back(Eigen::Vector3d(501.32, 273.409, 1.0));
-	vertices.push_back(Eigen::Vector3d(302.00, 29.2578, 1.0));
-	vertices.push_back(Eigen::Vector3d(297.973, 398.511, 1.0));
+	//vertices.push_back(Eigen::Vector3d(299.987, 31.2756, 1.0));
+	//vertices.push_back(Eigen::Vector3d(555.68, 273.409, 1.0));
+	//vertices.push_back(Eigen::Vector3d(545.613, 39.3467, 1.0));
+	//vertices.push_back(Eigen::Vector3d(236.567, 250.204, 1.0));
+	//
+	//vertices.push_back(Eigen::Vector3d(95.6333, 264.329, 1.0));
+	//vertices.push_back(Eigen::Vector3d(501.32, 273.409, 1.0));
+	//vertices.push_back(Eigen::Vector3d(302.00, 29.2578, 1.0));
+	//vertices.push_back(Eigen::Vector3d(297.973, 398.511, 1.0));
 
-	lineVertices = vertices;
+	//std::vector<Eigen::Vector3d> vertices;
+	//vertices.push_back(Eigen::Vector3d(58, 426, 1.0));
+	//vertices.push_back(Eigen::Vector3d(510, 89, 1.0));
+	//vertices.push_back(Eigen::Vector3d(546, 413, 1.0));
+	//vertices.push_back(Eigen::Vector3d(213, 186, 1.0));
+
+	//vertices.push_back(Eigen::Vector3d(105, 247, 1.0));
+	//vertices.push_back(Eigen::Vector3d(299, 130, 1.0));
+	//vertices.push_back(Eigen::Vector3d(334, 388, 1.0));
+	//vertices.push_back(Eigen::Vector3d(76, 171, 1.0));
+	//
+	//vertices.push_back(Eigen::Vector3d(302, 420, 1.0));
+	//vertices.push_back(Eigen::Vector3d(495, 240, 1.0));
+	//vertices.push_back(Eigen::Vector3d(569, 375, 1.0));
+	//vertices.push_back(Eigen::Vector3d(362, 244, 1.0));
+
+	//vertices.push_back(Eigen::Vector3d(140, 134, 1.0));
+	//vertices.push_back(Eigen::Vector3d(554, 127, 1.0));
+	//vertices.push_back(Eigen::Vector3d(407, 314, 1.0));
+	//vertices.push_back(Eigen::Vector3d(363, 22, 1.0));
+	//
+	//vertices.push_back(Eigen::Vector3d(224, 89, 1.0));
+	//vertices.push_back(Eigen::Vector3d(191, 324, 1.0));
+	//vertices.push_back(Eigen::Vector3d(39, 187, 1.0));
+	//vertices.push_back(Eigen::Vector3d(385, 181, 1.0));
+
+	//lineVertices = vertices;
 
 	for (auto pl : lineVertices)
 		std::cout << pl.x() << ", " << pl.y() << ", " << pl.z() << std::endl;
@@ -129,6 +155,7 @@ void MetricRectification::solve()
 	C(2, 1) = x(4) / 2.0;
 	C(2, 2) = 1.0;
 
+
 	std::cout << "C : " << std::endl << C << std::endl << std::endl;
 
 	Eigen::MatrixXd KKt(2, 2);
@@ -150,24 +177,24 @@ void MetricRectification::solve()
 
 	std::cout << "V : " << std::endl << V << std::endl << std::endl;
 
-	Eigen::LLT<Eigen::MatrixXd> llt(KKt);
-	Eigen::MatrixXd K = llt.matrixU();
-	Eigen::MatrixXd M(3, 3);
-	M(0, 0) = K(0, 0);
-	M(0, 1) = K(0, 1);
-	M(0, 2) = 0;
-	M(1, 0) = K(1, 0);
-	M(1, 1) = K(1, 1);
-	M(1, 2) = 0;
-	M(2, 0) = V(0);
-	M(2, 1) = V(1);
-	M(2, 2) = 1;
-
-	//M << K(0,0), K(0,1),0, K(1,0), K(1,1),0, V(0), V(1), 1;
+	Eigen::MatrixXd K = Eigen::LDLT<Eigen::MatrixXd>(KKt).matrixU();
 
 	std::cout << "K : " << std::endl << K << std::endl << std::endl;
 
-	h = M.inverse();
+	Eigen::MatrixXd H(3, 3);
+	H(0, 0) = K(0, 0);
+	H(0, 1) = K(0, 1);
+	H(0, 2) = 0;
+	H(1, 0) = K(1, 0);
+	H(1, 1) = K(1, 1);
+	H(1, 2) = 0;
+	H(2, 0) = V(0);
+	H(2, 1) = V(1);
+	H(2, 2) = 1;
+
+	h = H;
+
+	std::cout << "H: " << std::endl << H << std::endl << std::endl;
 }
 
 

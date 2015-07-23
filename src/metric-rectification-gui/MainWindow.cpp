@@ -136,6 +136,8 @@ void MainWindow::onCalculateButtonPress()
 			{
 				//QRgb rgb = bilinearInterpol(inputImage, t.x(), t.y(), dx / 2.0f, dy / 2.0f);
 				//outputImage.setPixel(x, y, rgb);
+				
+				//outputImage.setPixel(x, outputImage.height() - 1 - y, inputImage.pixel(t.x(), inputImage.height() - 1 - t.y()));
 				outputImage.setPixel(x, y, inputImage.pixel(t.x(), t.y()));
 			}
 		}
