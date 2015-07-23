@@ -96,18 +96,14 @@ int main(int argc, char* argv[])
 
 	GLLines* gllines = &w.getGLWidget()->glLines();
 
-	//gllines->setVertexLine(0, 0, QVector3D(68, 164, 1.0f));
-	//gllines->setVertexLine(0, 1, QVector3D(142, 123, 1.0f));
-	//gllines->setVertexLine(1, 0, QVector3D(68, 174, 1.0f));
-	//gllines->setVertexLine(1, 1, QVector3D(142, 133, 1.0f));
-
+	
 	//gllines->setVertexLine(0, 0, QVector3D(52.3467f, 125.102f, 1.0f));
 	//gllines->setVertexLine(0, 1, QVector3D(340.253f, 130.147f, 1.0f));
 	//gllines->setVertexLine(1, 0, QVector3D(193.28f, 126.111f, 1.0f));
 	//gllines->setVertexLine(1, 1, QVector3D(225.493f, 360.173f, 1.0f));
 	//gllines->setVertexLine(2, 0, QVector3D(42.28f, 263.32f, 1.0f));
 	//gllines->setVertexLine(2, 1, QVector3D(296.967f, 397.502f, 1.0f));
-	//gllines->setVertexLine(3, 0, QVector3D(212.407f, 269.373f, 1.0f);)u
+	//gllines->setVertexLine(3, 0, QVector3D(212.407f, 269.373f, 1.0f));
 	//gllines->setVertexLine(3, 1, QVector3D(34.2267f, 391.449f, 1.0f));
 	//gllines->setVertexLine(4, 0, QVector3D(294.953f, 318.809f, 1.0f));
 	//gllines->setVertexLine(4, 1, QVector3D(456.02f, 322.844f, 1.0f));

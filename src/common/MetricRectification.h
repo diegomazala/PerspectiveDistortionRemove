@@ -11,25 +11,27 @@ public:
 	MetricRectification(int point_count);
 	virtual ~MetricRectification();
 
-	void setVertexLine(int line_index, int vertex_index, Eigen::Vector3f v);
 
+	void setVertexLine(int line_index, int vertex_index, Eigen::Vector3d v);
+	
 	void solve();
 	
-	void computImageSize(float in_x, float in_y, float in_width, float in_height, float& min_x, float& max_x, float& min_y, float& max_y) const;
-	Eigen::Vector2f multiplyPointMatrixInverse(float x, float y) const;
-	Eigen::Vector2f multiplyPointMatrix(float x, float y) const;
+	void computImageSize(double in_x, double in_y, double in_width, double in_height, double& min_x, double& max_x, double& min_y, double& max_y) const;
+	Eigen::Vector2d multiplyPointMatrixInverse(double x, double y) const;
+	Eigen::Vector2d multiplyPointMatrix(double x, double y) const;
 
-	Eigen::MatrixXf H() const { return h; };
+	Eigen::MatrixXd H() const { return h; };
 
-	static Eigen::Vector3f normalizeLine(Eigen::Vector3f p0, Eigen::Vector3f p1);
+	static Eigen::Vector3d normalizeLine(Eigen::Vector3d p0, Eigen::Vector3d p1);
 
 private:
 
-	std::vector<Eigen::Vector3f> lineVertices;
-	std::vector<Eigen::Vector3f> lines;
+	std::vector<Eigen::Vector3d> lineVertices;
+	std::vector<Eigen::Vector3d> lines;
 	const int linePairsCount;
 
-	Eigen::MatrixXf h;
+	Eigen::MatrixXd h;
+
 };
 
 

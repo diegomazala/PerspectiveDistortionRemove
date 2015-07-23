@@ -104,31 +104,31 @@ void MainWindow::onGLMouseMove(int x, int y)
 
 void MainWindow::onCalculateButtonPress()
 {
+
 	rectific.solve();
 
-	Eigen::Vector3f img(inputImage.width(), inputImage.height(), 1.0f);
+	Eigen::Vector3d img(inputImage.width(), inputImage.height(), 1.0f);
 
-	float xmin, xmax, ymin, ymax;
+	double xmin, xmax, ymin, ymax;
 	rectific.computImageSize(0, 0, inputImage.width(), inputImage.height(), xmin, xmax, ymin, ymax);
 
-	float aspect = (xmax - xmin) / (ymax - ymin);
+	double aspect = (xmax - xmin) / (ymax - ymin);
 	outputImage = QImage(inputImage.width(), inputImage.width() / aspect, inputImage.format());
 	outputImage.fill(qRgb(0, 0, 0));
 
 
-	float dx = (xmax - xmin) / float(outputImage.width());
-	float dy = (ymax - ymin) / float(outputImage.height());
+	double dx = (xmax - xmin) / double(outputImage.width());
+	double dy = (ymax - ymin) / double(outputImage.height());
 
 	for (int x = 0; x < outputImage.width(); ++x)
 	{
 		for (int y = 0; y < outputImage.height(); ++y)
 		{
-			Eigen::Vector3f px(x, y, 1);
+			Eigen::Vector3d px(x, y, 1);
 
-			float tx = 0.0f;
-			float ty = 0.0f;
-			//Eigen::Vector2f t = rectific.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
-			Eigen::Vector2f t = rectific.multiplyPointMatrix(xmin + x * dx, ymin + y * dy);
+			double tx = 0.0f;
+			double ty = 0.0f;
+			Eigen::Vector2d t = rectific.multiplyPointMatrix(xmin + x * dx, ymin + y * dy);
 
 			if (t.x() > -1 && t.y() > -1
 				&& t.x() < inputImage.width()
@@ -210,7 +210,7 @@ void MainWindow::onLine4RadioButtonToggled(bool toggle)
 
 void MainWindow::onNewPoint(int line_index, int vertex_index, int x, int y)
 {
-	rectific.setVertexLine(line_index, vertex_index, Eigen::Vector3f(x, y, 1));
+	rectific.setVertexLine(line_index, vertex_index, Eigen::Vector3d(x, y, 1));
 
 	if (line_index % 2)
 		vertex_index = 2 + vertex_index;
