@@ -190,28 +190,21 @@ int main(int argc, char* argv[])
 
 	std::cout << "V : " << std::endl << V << std::endl << std::endl;
 
-	Eigen::LLT<Eigen::MatrixXd> llt(KKt);
-	Eigen::MatrixXd K = llt.matrixU();
-	Eigen::MatrixXd M(3, 3);
-	M(0, 0) = K(0, 0);
-	M(0, 1) = K(0, 1);
-	M(0, 2) = 0;
-	M(1, 0) = K(1, 0);
-	M(1, 1) = K(1, 1);
-	M(1, 2) = 0;
-	M(2, 0) = V(0);
-	M(2, 1) = V(1);
-	M(2, 2) = 1;
+	Eigen::MatrixXd K = Eigen::LDLT<Eigen::MatrixXd>(KKt).matrixU();
 
-	//M << K(0,0), K(0,1),0, K(1,0), K(1,1),0, V(0), V(1), 1;
-	
 	std::cout << "K : " << std::endl << K << std::endl << std::endl;
 
-	Eigen::MatrixXd H = M.inverse();
-	
+	Eigen::MatrixXd H(3, 3);
+	H(0, 0) = K(0, 0);
+	H(0, 1) = K(0, 1);
+	H(0, 2) = 0;
+	H(1, 0) = K(1, 0);
+	H(1, 1) = K(1, 1);
+	H(1, 2) = 0;
+	H(2, 0) = V(0);
+	H(2, 1) = V(1);
+	H(2, 2) = 1;
 
-
-	//Eigen::MatrixXd H(3, 3);
 	//H(0, 0) = 1.0;
 	//H(0, 1) = 0.311986;
 	//H(0, 2) = 0;
@@ -222,8 +215,7 @@ int main(int argc, char* argv[])
 	//H(2, 1) = 0.00123956;
 	//H(2, 2) = 1;
 
-	std::cout << "H matrix: " << std::endl
-		<< H << std::endl << std::endl;
+	std::cout << "H: " << std::endl << H << std::endl << std::endl;
 
 	std::string inputFileName = "../../data/floor.jpg";
 	std::string outputFileName = "output.png";
@@ -271,15 +263,7 @@ int main(int argc, char* argv[])
 				&& t.x() < input.width()
 				&& t.y() < input.height())
 			{
-				//if (interpolate)
-				//{
-				//	QRgb rgb = bilinearInterpol(input, t.x(), t.y(), dx / 2.0, dy / 2.0);
-				//	output.setPixel(x, y, rgb);
-				//}
-				//else
-				{
-					output.setPixel(x, y, input.pixel(t.x(), t.y()));
-				}
+				output.setPixel(x, output.height() - y - 1, input.pixel(t.x(), input.height() - t.y() - 1));
 			}
 		}
 	}
