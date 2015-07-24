@@ -25,9 +25,6 @@ private:
 	const int lineCount;
 	std::vector<Eigen::Vector3f> imagePoints;
 	
-	Eigen::MatrixXf A;
-	Eigen::VectorXf x;
-	Eigen::VectorXf b;
 	Eigen::MatrixXf h;
 };
 

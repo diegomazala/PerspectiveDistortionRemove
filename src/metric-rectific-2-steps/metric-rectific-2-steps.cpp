@@ -52,6 +52,7 @@ void readConfigFile(const char* config_file, Arpl& arpl, std::string& input_file
 // Example usage:  $./affine-rectific-parallel-lines-console.exe ../../data/config-affine-rectific-parallel-lines.txt
 int main(int argc, char* argv[])
 {
+#if 0
 	if (argc < 2)
 	{
 		std::cerr << "Error: Missing parameters.\n"
@@ -120,27 +121,100 @@ int main(int argc, char* argv[])
 
 
 
+#endif
 
+	if (argc < 2)
+	{
+		std::cerr << "Error: Missing parameters.\n"
+			<< "Usage: <app.exe> <image_affine>"
+			<< std::endl;
+		return EXIT_FAILURE;
+	}
 
 	//=============================================================================================================
 	//==========================     STEP   2   ===================================================================
 	//=============================================================================================================
 	std::cout << "\n==============================================================\n" << std::endl;
-	output.save("_affine.jpg");
-	input = output;
+	QImage input(argv[1]);
 
 	Affine2Similarity af2sm;
 
-	af2sm.setLinePoint(0, 40, 93, 140, 62);
-	af2sm.setLinePoint(1, 140, 62, 194, 95);
-	af2sm.setLinePoint(2, 65, 16, 113, 46);
-	af2sm.setLinePoint(3, 113, 46, 214, 14);
+
+	//af2sm.setLinePoint(0, 71, 39, 305, 33);
+	//af2sm.setLinePoint(1, 148, 36, 72, 256);
+
+	//af2sm.setLinePoint(2, 20, 184, 101, 293);
+	//af2sm.setLinePoint(3, 20, 294, 280, 104);
+
+	af2sm.setLinePoint(0, 150, 137, 73, 256);
+	af2sm.setLinePoint(1, 19, 75, 330, 68);
+
+	af2sm.setLinePoint(2, 101, 293, 258, 177);
+	af2sm.setLinePoint(3, 182, 290, 45, 110);
+
+
+
+
+
+
+	// affine-input-2-pairs-lines.jpg
+	//af2sm.setLinePoint(0, 20, 183, 73, 256);
+	//af2sm.setLinePoint(1, 73, 256, 179, 179);
+
+	//af2sm.setLinePoint(2, 45, 110, 149, 34);
+	//af2sm.setLinePoint(3, 149, 34, 203, 104);
+
+	// affine-input-2-pairs-lines-2.jpg
+	//af2sm.setLinePoint(0, 72, 256, 148, 36);
+	//af2sm.setLinePoint(1, 148, 36, 303, 32);
+
+	//af2sm.setLinePoint(2, 20, 183, 178, 180);
+	//af2sm.setLinePoint(3, 204, 104, 155, 254);
 
 
 
 	af2sm.computeHMatrix();
+	
 
-	output.save("_similarity.jpg");
+	Eigen::Vector3f img(input.width(), input.height(), 1.0f);
+
+	float xmin = 0;
+	float xmax = 0;
+	float ymin = 0;
+	float ymax = 0;
+	af2sm.computImageSize(0, 0, input.width(), input.height(), xmin, xmax, ymin, ymax);
+
+	float aspect = (xmax - xmin) / (ymax - ymin);
+	QImage output(input.width(), input.width() / aspect, input.format());
+	output.fill(qRgb(0, 0, 0));
+
+	std::cout << "Output size: " << output.width() << ", " << output.height() << std::endl;
+
+	float dx = (xmax - xmin) / float(output.width());
+	float dy = (ymax - ymin) / float(output.height());
+
+	std::cout << std::fixed << "dx, dy: " << dx << ", " << dy << std::endl;
+
+	for (int x = 0; x < output.width(); ++x)
+	{
+		for (int y = 0; y < output.height(); ++y)
+		{
+			Eigen::Vector3f px(x, y, 1);
+
+			float tx = 0.0f;
+			float ty = 0.0f;
+			Eigen::Vector2f t = af2sm.multiplyPointMatrixInverse(xmin + x * dx, ymin + y * dy);
+
+			if (t.x() > -1 && t.y() > -1
+				&& t.x() < input.width()
+				&& t.y() < input.height())
+			{
+				output.setPixel(x, y, input.pixel(t.x(), t.y()));
+			}
+		}
+	}
+
+	output.save("output_similarity.jpg");
 	//output.save(outputFileName.c_str());
 
 	return EXIT_SUCCESS;
